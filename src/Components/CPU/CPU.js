@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Descriptions } from 'antd';
-const si = window.require('systeminformation');
 
-const SystemInfo = () => {
+const SystemInfo = ({ siData }) => {
 
     const [cpuinfo, setcpuinfo] = useState(null);
     const [cpucache, setcpucache] = useState(null);
@@ -18,43 +17,32 @@ const SystemInfo = () => {
             return `${mb} MB`;
         }
     }
-    useEffect(() => {
-        si.cpu().then(data =>
-            setcpuinfo(
-                Object.keys(data).filter(key => key !== 'cache').map((key, index) => ({
-                    label: <b>{key.toUpperCase()}</b>,
-                    children: data[key] === false ? 'No' : JSON.stringify(key).includes('speed') ? data[key] + 'GHz' : data[key],
-                    key: index + 1,
-                }))
-            )
-        );
-        si.cpuCache().then(data =>
-            setcpucache(
-                Object.keys(data).filter(key => key !== 'cache').map((key, index) => ({
-                    label: <b>{key.toUpperCase()}</b>,
-                    children: data[key] === false ? 'No' : JSON.stringify(key).includes('speed') ? data[key] + 'GHz' : formatBytes(data[key]),
-                    key: index + 1,
-                }))
-            )
-        );
 
+    useEffect(() => {
+
+        setcpuinfo(
+            Object.keys(siData.cpu).filter(key => key !== 'cache').map((key, index) => ({
+                label: <b>{key.toUpperCase()}</b>,
+                children: siData.cpu[key] === false ? 'No' : JSON.stringify(key).includes('speed') ? siData.cpu[key] + 'GHz' : siData.cpu[key],
+                key: index + 1,
+            }))
+        )
+
+
+        setcpucache(
+            Object.keys(siData.cpuCache).filter(key => key !== 'cache').map((key, index) => ({
+                label: <b>{key.toUpperCase()}</b>,
+                children: siData.cpuCache[key] === false ? 'No' : JSON.stringify(key).includes('speed') ? siData.cpuCache[key] + 'GHz' : formatBytes(siData.cpuCache[key]),
+                key: index + 1,
+            }))
+        )
 
     }, []);
-
-    useEffect(() => {
-
-    }, [])
-
-    useEffect(() => {
-        console.log(cpuinfo);
-
-    }, [cpuinfo]); // Add systeminfo as a dependency
-
+    useEffect(() => { console.log(siData) }, [cpuinfo])
 
     return (
         <><Descriptions className='custom-descriptions' column={2} title="CPU Info" bordered items={cpuinfo} />
             <Descriptions className='custom-descriptions' column={2} title="Cache lvls Info" bordered items={cpucache} />
-
         </>
     )
 }

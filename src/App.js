@@ -1,22 +1,48 @@
 
 import './App.css';
 import { Layout, Menu } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SystemInfo from './Components/SystemInfo/SystemInfo';
 import CPU from './Components/CPU/CPU';
 import MemoryInfo from './Components/MemoryInfo/MemoryInfo';
 import Graphics from './Components/Graphics/Graphics';
 import Battery from './Components/Battery/Battery';
 import OS from './Components/OS/OS';
-const {  Footer, Sider, Content } = Layout;
-
+import StorageDevices from './Components/StorageDevices/StorageDevices';
+import NetworkInterfaces from './Components/NetworkInterfaces/NetworkInterfaces';
+import WifiNetworks from './Components/WifiNetworks/WifiNetworks';
+const { Footer, Sider, Content } = Layout;
+const si = window.require('systeminformation');
 
 function App() {
-
+  const [siObject, setsiObject] = useState(null);
   const [selectedMenuItemKey, setSelectedMenuItemKey] = useState('1');
   const handleMenuChange = (selectedKey) => {
     setSelectedMenuItemKey(selectedKey);
   };
+  const obj = {
+    cpu: '*',
+    cpuCache: '*',
+    mem: '*',
+    memLayout: '*',
+    graphics: 'controllers',
+    battery: '*',
+    osInfo: '*',
+    uuid: '*',
+    versions: '*',
+    diskLayout: '*',
+    networkInterfaces: '*',
+    networkGatewayDefault: '*',
+    networkInterfaceDefault: '*',
+    wifiNetworks: '*',
+    system: '*',
+    bios: '*',
+    baseboard: '*',
+    chassis: '*',
+  }
+  useEffect(() => {
+    si.get(obj).then(data => setsiObject(data));
+  }, [])
   return (
 
     <Layout hasSider>
@@ -49,6 +75,9 @@ function App() {
             <Menu.Item key="4">Graphics</Menu.Item>
             <Menu.Item key="5">Battery</Menu.Item>
             <Menu.Item key="6">OS</Menu.Item>
+            <Menu.Item key="7">Storage Devices</Menu.Item>
+            <Menu.Item key="8">Network Interfaces</Menu.Item>
+            <Menu.Item key="9">Wifi Networks</Menu.Item>
           </Menu>
         ) : null}
       </Sider>
@@ -76,24 +105,33 @@ function App() {
           }}
         ><div >
             {selectedMenuItemKey === '1' ?
-             <SystemInfo />
-             :
-             selectedMenuItemKey === '2' ?
-             <CPU/>
-             :
-             selectedMenuItemKey === '3' ?
-             <MemoryInfo/>
-             :
-             selectedMenuItemKey === '4' ?
-             <Graphics/>
-             :
-             selectedMenuItemKey === '5' ?
-             <Battery/>
-             :
-             selectedMenuItemKey === '6' ?
-             <OS/>
-             :
-             null}
+              <SystemInfo siData={siObject} />
+              :
+              selectedMenuItemKey === '2' ?
+                <CPU siData={siObject} />
+                :
+                selectedMenuItemKey === '3' ?
+                  <MemoryInfo siData={siObject} />
+                  :
+                  selectedMenuItemKey === '4' ?
+                    <Graphics siData={siObject} />
+                    :
+                    selectedMenuItemKey === '5' ?
+                      <Battery siData={siObject} />
+                      :
+                      selectedMenuItemKey === '6' ?
+                        <OS siData={siObject} />
+                        :
+                        selectedMenuItemKey === '7' ?
+                          <StorageDevices siData={siObject} />
+                          :
+                          selectedMenuItemKey === '8' ?
+                            <NetworkInterfaces siData={siObject} />
+                            :
+                            selectedMenuItemKey === '9' ?
+                              <WifiNetworks siData={siObject} />
+                              :
+                              null}
           </div>
         </Content>
         <Footer
