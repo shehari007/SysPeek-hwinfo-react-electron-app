@@ -16,8 +16,12 @@ function createWindow() {
       contextIsolation: false,
      
     },
+    show: false
   });
+  mainWindow.setIcon(path.join(__dirname, 'logo192.png'));
 
+  splash = new BrowserWindow({ width: 810, height: 610, transparent: true, frame: false, alwaysOnTop: true });
+  splash.loadURL(`file://${__dirname}/splash.html`);
   // In production, set the initial browser path to the local bundle generated
   // by the Create React App build process.
   // In development, set it to localhost to allow live/hot-reloading.
@@ -30,20 +34,17 @@ function createWindow() {
     : "http://localhost:3000";
   mainWindow.loadURL(appURL);
   
+
+  ipcMain.on('async-operation-complete', () => {
+    // Close the splash screen and show the main window
+    splash.destroy();
+    mainWindow.show();
+  });
+
   // Automatically open Chrome's DevTools in development mode.
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
-
-
-  ipcMain.on('get-hardware-info', async (event) => {
-    try {
-      const hardwareInfo = await si.getStaticData();
-      event.reply('hardware-info', hardwareInfo);
-    } catch (error) {
-      event.reply('hardware-info', { error: error.message });
-    }
-  });
 }
  
 // Setup a local proxy to adjust the paths of requested files when loading

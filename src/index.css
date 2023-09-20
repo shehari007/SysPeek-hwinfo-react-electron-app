@@ -1,4 +1,5 @@
 body {
+  
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -9,16 +10,37 @@ body {
 .custom-descriptions .ant-descriptions-item-label {
   width: 15%;
 }
-
+.site-layout {
+  background-color: black;
+}
+:where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark .ant-menu-item-selected, :where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark>.ant-menu .ant-menu-item-selected {
+  background-color: #1a4c7b;
+}
+.ant-descriptions.ant-descriptions-bordered >.ant-descriptions-view .ant-descriptions-row >.ant-descriptions-item-label {
+  background-color: #1a4c7b; 
+  color: white;
+  box-shadow: 0 2px 4px rgb(242, 242, 242);
+}
 .custom-descriptions .ant-descriptions-item-content {
   width: 45%;
+  background-color: #001529;
+  color: white;
+  box-shadow: 0 2px 4px rgb(242, 242, 242);
+}
+.footer {
+  background-color: #1a4c7b;
+  color: white;
 }
 .custom-descriptions .ant-descriptions-title {
-  background-color: black;
+  background-color: #1c4461;
   color: white;
+  padding-top: 20px;
+  padding-bottom: 20px;
   text-align: center;
   font-size: large;
   font-weight: bold;
+  margin-bottom: -21px;
+  box-shadow: 0 2px 4px rgb(242, 242, 242);
 }
 .custom-descriptions {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

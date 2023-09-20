@@ -1,6 +1,6 @@
 {
   "name": "syspeek-systeminfo-viewer",
-  "version": "0.1.2",
+  "version": "0.1.8",
   "author": "Muhammad Sheharyar Butt",
   "description": "Detailed System information viewer",
   "private": true,
@@ -41,7 +41,8 @@
       "target": "dmg"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "public/logo192.png"
     },
     "nsis": {
       "allowToChangeInstallationDirectory": true,

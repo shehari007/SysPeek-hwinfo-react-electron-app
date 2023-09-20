@@ -19,8 +19,14 @@ const SystemInfo = ({siData}) => {
 
     return (
         <><Descriptions className='custom-descriptions' column={2} title="Battery Info" bordered items={battinfo} />
-
-
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/><br/>
         </>
     )
 }
