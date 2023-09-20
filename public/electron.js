@@ -1,13 +1,14 @@
 // Module to control the application lifecycle and the native browser window.
-const { app, BrowserWindow, protocol, ipcMain } = require("electron");
+const { app, BrowserWindow, protocol, ipcMain, shell } = require("electron");
 const path = require("path");
 const url = require("url");
-const si = require('systeminformation');
+
 // Create the native browser window.
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
+    
     // Set the path of an additional "preload" script that can be used to
     // communicate between node-land and browser-land.
     webPreferences: {
@@ -33,7 +34,7 @@ function createWindow() {
       })
     : "http://localhost:3000";
   mainWindow.loadURL(appURL);
-  
+  mainWindow.setMenu(null)
 
   ipcMain.on('async-operation-complete', () => {
     // Close the splash screen and show the main window
@@ -69,7 +70,11 @@ app.whenReady().then(() => {
   setupLocalFilesNormalizerProxy();
   createWindow();
 
- 
+  ipcMain.on('open-external-link', (event, url) => {
+    // Open the URL in the default web browser
+    shell.openExternal(url);
+  });
+
   app.on("activate", function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.

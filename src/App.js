@@ -12,12 +12,13 @@ import StorageDevices from './Components/StorageDevices/StorageDevices';
 import NetworkInterfaces from './Components/NetworkInterfaces/NetworkInterfaces';
 import WifiNetworks from './Components/WifiNetworks/WifiNetworks';
 import Display from './Components/Display/Display';
+import Home from './Components/Home/Home';
 const { Footer, Sider, Content } = Layout;
 const si = window.require('systeminformation');
 const { ipcRenderer } = window.require('electron');
 function App() {
   const [siObject, setsiObject] = useState(null);
-  const [selectedMenuItemKey, setSelectedMenuItemKey] = useState('0');
+  const [selectedMenuItemKey, setSelectedMenuItemKey] = useState('11');
   const handleMenuChange = (selectedKey) => {
     setSelectedMenuItemKey(selectedKey);
   };
@@ -27,7 +28,6 @@ function App() {
     mem: '*',
     memLayout: '*',
     graphics: 'controllers, displays',
-    
     battery: '*',
     osInfo: '*',
     uuid: '*',
@@ -79,6 +79,7 @@ function App() {
             }}
             selectedKeys={selectedMenuItemKey}
           >
+            <Menu.Item key="11"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}  src='menuIcons/home.png' height={25} width={25}></img></span>HomePage</Menu.Item>
             <Menu.Item key="1"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}  src='menuIcons/system-info.png' height={25} width={25}></img></span>System Info</Menu.Item>
             <Menu.Item key="2"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}  src='menuIcons/cpu.png' height={25} width={25}></img></span>CPU</Menu.Item>
             <Menu.Item key="3"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/ram.png' height={25} width={25}></img></span>Memory</Menu.Item>
@@ -144,6 +145,9 @@ function App() {
                               :
                               selectedMenuItemKey === '10' ?
                               <Display siData={siObject} />
+                              :
+                              selectedMenuItemKey === '11' ?
+                              <Home/>
                               :
                               null}
           </div>
