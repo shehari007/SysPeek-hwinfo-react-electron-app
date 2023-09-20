@@ -5,6 +5,9 @@ import { useState } from 'react';
 import SystemInfo from './Components/SystemInfo/SystemInfo';
 import CPU from './Components/CPU/CPU';
 import MemoryInfo from './Components/MemoryInfo/MemoryInfo';
+import Graphics from './Components/Graphics/Graphics';
+import Battery from './Components/Battery/Battery';
+import OS from './Components/OS/OS';
 const {  Footer, Sider, Content } = Layout;
 
 
@@ -80,6 +83,15 @@ function App() {
              :
              selectedMenuItemKey === '3' ?
              <MemoryInfo/>
+             :
+             selectedMenuItemKey === '4' ?
+             <Graphics/>
+             :
+             selectedMenuItemKey === '5' ?
+             <Battery/>
+             :
+             selectedMenuItemKey === '6' ?
+             <OS/>
              :
              null}
           </div>

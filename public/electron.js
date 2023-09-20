@@ -13,12 +13,11 @@ function createWindow() {
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
-      contextIsolation: false
+      contextIsolation: false,
+     
     },
   });
 
-  
- 
   // In production, set the initial browser path to the local bundle generated
   // by the Create React App build process.
   // In development, set it to localhost to allow live/hot-reloading.
@@ -35,6 +34,7 @@ function createWindow() {
   if (!app.isPackaged) {
     mainWindow.webContents.openDevTools();
   }
+
 
   ipcMain.on('get-hardware-info', async (event) => {
     try {
