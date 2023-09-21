@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Descriptions } from 'antd';
 
-const Graphics = ({ siData }) => {
+const Bluetooth = ({ siData }) => {
 
   const [graphicsinfo, setgraphicsinfo] = useState(null);
 
   useEffect(() => {
 
-    const data2 = siData.graphics.controllers
+    const data2 = siData.bluetoothDevices
     const mappedData = data2.map((graphic, index) => {
       const keys = Object.keys(graphic);
 
@@ -18,7 +18,7 @@ const Graphics = ({ siData }) => {
       ));
 
       return {
-        label: <b>{graphic.vendor}</b>,
+        label: <b>{graphic.manufacturer === "" ? graphic.name : graphic.manufacturer}</b>,
         children: (
           <div>
             {renderedKeyValues}
@@ -33,13 +33,9 @@ const Graphics = ({ siData }) => {
 
   return (
     <>
-      <Descriptions className='custom-descriptions' column={2} title="Graphics Info" bordered items={graphicsinfo} />
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+      <Descriptions className='custom-descriptions' column={2} title="Detected Bluetooth Devices Info" bordered items={graphicsinfo} />
     </>
   )
 }
 
-export default Graphics
+export default Bluetooth

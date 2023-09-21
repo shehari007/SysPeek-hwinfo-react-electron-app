@@ -7,15 +7,42 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1a4c7b;
+}
+a {
+  color: yellow;
+  
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 .custom-descriptions .ant-descriptions-item-label {
   width: 15%;
+}
+.custom-menu {
+  user-select: none;
 }
 .site-layout {
   background-color: black;
 }
+
 :where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark .ant-menu-item-selected, :where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark>.ant-menu .ant-menu-item-selected {
   background-color: #1a4c7b;
 }
+
 .ant-descriptions.ant-descriptions-bordered >.ant-descriptions-view .ant-descriptions-row >.ant-descriptions-item-label {
   background-color: #1a4c7b; 
   color: white;
@@ -30,6 +57,10 @@ body {
 .footer {
   background-color: #1a4c7b;
   color: white;
+}
+.table-custom {
+  background-color: #1c4461;
+  color: black;
 }
 .custom-descriptions .ant-descriptions-title {
   background-color: #1c4461;

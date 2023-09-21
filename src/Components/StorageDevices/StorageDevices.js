@@ -41,7 +41,8 @@ const StorageDevices = ({ siData }) => {
             };
         });
 
-        setdrivesinfo(mappedData);
+       setdrivesinfo(mappedData)
+    
     }, []);
 
     return (

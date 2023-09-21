@@ -13,6 +13,10 @@ import NetworkInterfaces from './Components/NetworkInterfaces/NetworkInterfaces'
 import WifiNetworks from './Components/WifiNetworks/WifiNetworks';
 import Display from './Components/Display/Display';
 import Home from './Components/Home/Home';
+import Audio from './Components/Audio/Audio';
+import Bluetooth from './Components/Bluetooth/Bluetooth';
+import Printers from './Components/Printers/Printers';
+import USB from './Components/USB/USB';
 const { Footer, Sider, Content } = Layout;
 const si = window.require('systeminformation');
 const { ipcRenderer } = window.require('electron');
@@ -41,35 +45,42 @@ function App() {
     bios: '*',
     baseboard: '*',
     chassis: '*',
+    audio: '*',
+    bluetoothDevices: '*',
+    printer: '*',
+    usb: '*'
   }
   useEffect(() => {
     si.get(obj)
       .then(data => {
-       
+
         setsiObject(data);
-  
-        
+
+
         ipcRenderer.send('async-operation-complete');
       });
   }, []);
-  
+
   return (
 
     <Layout hasSider>
+      
       <Sider
         className='sider'
         style={{
-
+          overflow: 'auto',
           height: '100%',
+          width: '100%',
           position: 'fixed',
           left: 0,
           top: 0,
           bottom: 0,
         }}
       >
-        <div className="demo-logo-vertical" align="center" ><img style={{marginBottom: '10px', marginTop:'20px'}} align="center" src='logo192.png' height={80} width={90} alt='logo' /></div>
+        <div className="demo-logo-vertical" align="center" ><img style={{ marginBottom: '10px', marginTop: '20px' }} align="center" src='logo192.png' height={80} width={90} alt='logo' /></div>
         {selectedMenuItemKey !== null ? (
           <Menu
+            className='custom-menu'
             mode="vertical"
             theme='dark'
             defaultSelectedKeys={selectedMenuItemKey}
@@ -79,17 +90,125 @@ function App() {
             }}
             selectedKeys={selectedMenuItemKey}
           >
-            <Menu.Item key="11"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}  src='menuIcons/home.png' height={25} width={25}></img></span>HomePage</Menu.Item>
-            <Menu.Item key="1"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}  src='menuIcons/system-info.png' height={25} width={25}></img></span>System Info</Menu.Item>
-            <Menu.Item key="2"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}  src='menuIcons/cpu.png' height={25} width={25}></img></span>CPU</Menu.Item>
-            <Menu.Item key="3"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/ram.png' height={25} width={25}></img></span>Memory</Menu.Item>
-            <Menu.Item key="4"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/gpu.png' height={25} width={25}></img></span>Graphics</Menu.Item>
-            <Menu.Item key="10"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}  src='menuIcons/display.png' height={25} width={25}></img></span>Display</Menu.Item>
-            <Menu.Item key="5"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/battery.png' height={25} width={25}></img></span>Battery</Menu.Item>
-            <Menu.Item key="6"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/windows.png' height={25} width={25}></img></span>OS</Menu.Item>
-            <Menu.Item key="7"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/hdd.png' height={25} width={25}></img></span>Storage Devices</Menu.Item>
-            <Menu.Item key="8"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/computer-networks.png' height={25} width={25}></img></span>Network Interfaces</Menu.Item>
-            <Menu.Item key="9"><span ><img style={{marginRight: '10px', marginBottom: '-7px'}}   src='menuIcons/wifi.png' height={25} width={25}></img></span>Wifi Networks</Menu.Item>
+            <Menu.Item key="11">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/home.png' height={25} width={25}>
+                </img>
+              </span>
+              HomePage
+            </Menu.Item>
+
+            <Menu.Item key="1">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/system-info.png' height={25} width={25}>
+                </img>
+              </span>
+              System Info
+            </Menu.Item>
+
+            <Menu.Item key="2">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/cpu.png' height={25} width={25}>
+                </img>
+              </span>
+              CPU
+            </Menu.Item>
+
+            <Menu.Item key="3">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/ram.png' height={25} width={25}>
+                </img>
+              </span>
+              Memory
+            </Menu.Item>
+
+            <Menu.Item key="4">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/gpu.png' height={25} width={25}></img>
+              </span>
+              Graphics
+            </Menu.Item>
+
+            <Menu.Item key="10">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/display.png' height={25} width={25}>
+                </img>
+              </span>
+              Display
+            </Menu.Item>
+
+            <Menu.Item key="5">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/battery.png' height={25} width={25}>
+                </img>
+              </span>
+              Battery
+            </Menu.Item>
+
+            <Menu.Item key="6">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/windows.png' height={25} width={25}>
+                </img>
+              </span>
+              OS
+            </Menu.Item>
+
+            <Menu.Item key="7">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/hdd.png' height={25} width={25}>
+                </img>
+              </span>
+              Storage Devices
+            </Menu.Item>
+
+            <Menu.Item key="8">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/computer-networks.png' height={25} width={25}>
+                </img>
+              </span>
+              Network IF
+            </Menu.Item>
+
+            <Menu.Item key="9">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/wifi.png' height={25} width={25}>
+                </img>
+              </span>
+              Wifi Networks
+            </Menu.Item>
+
+            <Menu.Item key="12">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/audio.png' height={25} width={25}>
+                </img>
+              </span>
+              Audio
+            </Menu.Item>
+
+            <Menu.Item key="13">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/bluetooth.png' height={25} width={25}>
+                </img>
+              </span>
+              Bluetooth Devices
+            </Menu.Item>
+
+            <Menu.Item key="14">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/printer.png' height={25} width={25}>
+                </img>
+              </span>
+              Printers
+            </Menu.Item>
+
+            <Menu.Item key="15">
+              <span >
+                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/usb.png' height={25} width={25}>
+                </img>
+              </span>
+              USB Devices
+            </Menu.Item>
+
           </Menu>
         ) : null}
       </Sider>
@@ -144,21 +263,33 @@ function App() {
                               <WifiNetworks siData={siObject} />
                               :
                               selectedMenuItemKey === '10' ?
-                              <Display siData={siObject} />
-                              :
-                              selectedMenuItemKey === '11' ?
-                              <Home/>
-                              :
-                              null}
+                                <Display siData={siObject} />
+                                :
+                                selectedMenuItemKey === '11' ?
+                                  <Home />
+                                  :
+                                  selectedMenuItemKey === '12' ?
+                                    <Audio siData={siObject} />
+                                    :
+                                    selectedMenuItemKey === '13' ?
+                                      <Bluetooth siData={siObject} />
+                                      :
+                                      selectedMenuItemKey === '14' ?
+                                      <Printers siData={siObject} />
+                                      :
+                                      selectedMenuItemKey === '15' ?
+                                      <USB siData={siObject} />
+                                      :
+                                      null}
           </div>
         </Content>
         <Footer
-        className='footer'
+          className='footer'
           style={{
             textAlign: 'center',
           }}
         >
-         v0.1.8 SYSPeek - System Information Viewer {new Date().getFullYear()} Made With ❤ By Muhammad Sheharyar Butt
+          v0.1.8 SYSPeek - System Information Viewer {new Date().getFullYear()} Made With ❤ By Muhammad Sheharyar Butt
         </Footer>
       </Layout>
     </Layout>
