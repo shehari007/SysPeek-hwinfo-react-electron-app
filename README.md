@@ -56,7 +56,7 @@ git clone https://github.com/shehari007/SysPeek-hwinfo-react-electron-app.git
 Go to the project directory
 
 ```bash
-cd mini-react-electron-desktop-app
+cd SysPeek-hwinfo-ract-electron-app
 ```
 
 Install dependencies
