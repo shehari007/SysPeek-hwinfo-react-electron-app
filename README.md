@@ -35,7 +35,8 @@ With SysPeek, users can quickly access vital information about their system, inc
 -  Access info about your OS, Hardware, software, and drivers and many more.
 - Monitor CPU, disk, and network usage in real-time. _(in progress..)_
 - View IP, DNS, and network adapters information.
-- Check disk space, health, and file system details.
+- Check disk space and file system details.
+- Show current detected Bluetooth, WiFi, Printers, USB Devices.
 - Deployable on Windows, Linux, macOS 
 
 
