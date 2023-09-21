@@ -86,10 +86,6 @@ npm run electron:package:linux
 ```bash
 npm run electron:package:mac
 ```
-## For Website
-```bash
-npm run build
-```
 Running these commands will give you a package file (Windows->NSIS .exe) || (Linux->.deb) || (macOS->.dmg).
 ## License
 
