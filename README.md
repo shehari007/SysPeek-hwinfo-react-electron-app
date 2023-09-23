@@ -108,3 +108,6 @@ Running these commands will give you a package file (Windows->NSIS .exe) || (Lin
 
 If you have any feedback, please reach out at shehariyar@gmail.com
 dont't forget to give us a star if you like this project.
+
+## Liked my dedication? Buy me a coffee?
+<a href="https://www.buymeacoffee.com/shehari007">Buy Me A Coffee</a>
