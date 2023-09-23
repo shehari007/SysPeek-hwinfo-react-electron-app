@@ -39,6 +39,17 @@ With SysPeek, users can quickly access vital information about their system, inc
 - Show current detected Bluetooth, WiFi, Printers, USB Devices.
 - Deployable on Windows, Linux, macOS 
 
+## Screenshots
+
+<details>
+  <summary>See SS here.</summary>
+  <div align="center">
+  <h4>App View</h4>
+  <img src="https://github.com/shehari007/SysPeek-hwinfo-react-electron-app/blob/main/screenshots/syspeek%20(1).png?raw=true" name="image-1">
+  <h4>Home (About) View</h4>
+  <img src="https://github.com/shehari007/SysPeek-hwinfo-react-electron-app/blob/main/screenshots/syspeek%20(2).png?raw=true" name="image-2">
+  </div>
+</details>
 
 ## Pre Requirements For Local Development
 
