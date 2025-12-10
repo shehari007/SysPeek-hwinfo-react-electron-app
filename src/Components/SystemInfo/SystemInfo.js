@@ -1,58 +1,118 @@
-import React, { useState, useEffect } from 'react'
-import { Descriptions } from 'antd';
+import React, { useMemo } from 'react';
+import { Card, Row, Col, Typography, Tag, Divider } from 'antd';
+import { LaptopOutlined, ToolOutlined, BuildOutlined, BoxPlotOutlined } from '@ant-design/icons';
+
+const { Title, Text } = Typography;
 
 const SystemInfo = ({ siData }) => {
+  const system = siData?.system || {};
+  const bios = siData?.bios || {};
+  const baseboard = siData?.baseboard || {};
+  const chassis = siData?.chassis || {};
 
-    const [systeminfo, setsysteminfo] = useState(null);
-    const [systembios, setsystembios] = useState(null);
-    const [systembaseb, setsystembaseb] = useState(null);
-    const [systemchassis, setsystemchassis] = useState(null);
+  const systemSpecs = useMemo(() => [
+    { label: 'Manufacturer', value: system.manufacturer },
+    { label: 'Model', value: system.model },
+    { label: 'Version', value: system.version },
+    { label: 'Serial', value: system.serial },
+    { label: 'UUID', value: system.uuid },
+    { label: 'SKU', value: system.sku },
+  ], [system]);
 
-    useEffect(() => {
+  const biosSpecs = useMemo(() => [
+    { label: 'Vendor', value: bios.vendor },
+    { label: 'Version', value: bios.version },
+    { label: 'Release Date', value: bios.releaseDate },
+    { label: 'Revision', value: bios.revision },
+    { label: 'Serial', value: bios.serial },
+  ], [bios]);
 
-        setsysteminfo(
-            Object.keys(siData.system).map((key, index) => ({
-                label: <b>{key.toUpperCase()}</b>,
-                children: siData.system[key] === false ? 'No' : siData.system[key],
-                key: index + 1,
-            }))
-        )
+  const baseboardSpecs = useMemo(() => [
+    { label: 'Manufacturer', value: baseboard.manufacturer },
+    { label: 'Model', value: baseboard.model },
+    { label: 'Version', value: baseboard.version },
+    { label: 'Serial', value: baseboard.serial },
+    { label: 'Asset Tag', value: baseboard.assetTag },
+  ], [baseboard]);
 
-        setsystembios(
-            Object.keys(siData.bios).map((key, index) => ({
-                label: <b>{key.toUpperCase()}</b>,
-                children: siData.bios[key] === false ? 'No' : siData.bios[key],
-                key: index + 1,
-            }))
-        )
+  const chassisSpecs = useMemo(() => [
+    { label: 'Manufacturer', value: chassis.manufacturer },
+    { label: 'Model', value: chassis.model },
+    { label: 'Type', value: chassis.type },
+    { label: 'Version', value: chassis.version },
+    { label: 'Serial', value: chassis.serial },
+    { label: 'Asset Tag', value: chassis.assetTag },
+    { label: 'SKU', value: chassis.sku },
+  ], [chassis]);
 
-        setsystembaseb(
-            Object.keys(siData.baseboard).map((key, index) => ({
-                label: <b>{key.toUpperCase()}</b>,
-                children: siData.baseboard[key] === false ? 'No' : siData.baseboard[key],
-                key: index + 1,
-            }))
-        )
+  const InfoCard = ({ icon, title, color, specs }) => (
+    <Card className="info-card" bordered={false}>
+      <div className="card-title-row">
+        {React.cloneElement(icon, { style: { color, fontSize: '20px' } })}
+        <Title level={5} style={{ margin: 0, color: '#f1f5f9' }}>{title}</Title>
+      </div>
+      <Divider style={{ borderColor: 'rgba(255,255,255,0.1)', margin: '12px 0' }} />
+      <div className="info-grid-compact">
+        {specs.map((spec, i) => (
+          <div key={i} className="info-item-compact">
+            <Text type="secondary" className="info-label-sm">{spec.label}</Text>
+            <Text className="info-value-sm">{spec.value || 'N/A'}</Text>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
 
-        setsystemchassis(
-            Object.keys(siData.chassis).map((key, index) => ({
-                label: <b>{key.toUpperCase()}</b>,
-                children: siData.chassis[key] === false ? 'No' : siData.chassis[key],
-                key: index + 1,
-            }))
-        )
+  return (
+    <div className="section-container">
+      <div className="section-header">
+        <LaptopOutlined className="section-icon" style={{ color: '#f59e0b' }} />
+        <div>
+          <Title level={3} style={{ margin: 0, color: '#f1f5f9' }}>System Information</Title>
+          <Text type="secondary">{system.manufacturer} {system.model}</Text>
+        </div>
+        {system.virtual && <Tag color="purple">Virtual Machine</Tag>}
+      </div>
 
+      <Row gutter={[16, 16]}>
+        <Col xs={24} lg={12}>
+          <InfoCard 
+            icon={<LaptopOutlined />} 
+            title="System" 
+            color="#3b82f6" 
+            specs={systemSpecs} 
+          />
+        </Col>
+        
+        <Col xs={24} lg={12}>
+          <InfoCard 
+            icon={<ToolOutlined />} 
+            title="BIOS / UEFI" 
+            color="#10b981" 
+            specs={biosSpecs} 
+          />
+        </Col>
+        
+        <Col xs={24} lg={12}>
+          <InfoCard 
+            icon={<BuildOutlined />} 
+            title="Baseboard / Motherboard" 
+            color="#f59e0b" 
+            specs={baseboardSpecs} 
+          />
+        </Col>
+        
+        <Col xs={24} lg={12}>
+          <InfoCard 
+            icon={<BoxPlotOutlined />} 
+            title="Chassis" 
+            color="#8b5cf6" 
+            specs={chassisSpecs} 
+          />
+        </Col>
+      </Row>
+    </div>
+  );
+};
 
-    }, []);
-
-    return (
-        <>
-            <Descriptions className='custom-descriptions' column={1} title="System Info" bordered items={systeminfo} />
-            <Descriptions className='custom-descriptions' column={1} title="Bios Info" bordered items={systembios} />
-            <Descriptions className='custom-descriptions' column={1} title="BaseBoard Info" bordered items={systembaseb} />
-            <Descriptions className='custom-descriptions' column={1} title="Chassis Info" bordered items={systemchassis} />
-        </>
-    )
-}
-
-export default SystemInfo
+export default SystemInfo;

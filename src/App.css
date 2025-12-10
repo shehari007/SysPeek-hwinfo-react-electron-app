@@ -1,38 +1,1247 @@
-.App {
+/* ============================================
+   SysPeek Professional Dashboard Theme
+   Modern glassmorphism + dark mode design
+   ============================================ */
+
+/* Base Reset & Variables */
+:root {
+  --bg-primary: #0a0f1a;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --bg-card-hover: rgba(15, 23, 42, 0.8);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-highlight: rgba(59, 130, 246, 0.3);
+  --text-primary: #f1f5f9;
+  --text-secondary: rgba(241, 245, 249, 0.7);
+  --text-muted: rgba(241, 245, 249, 0.5);
+  --accent-blue: #3b82f6;
+  --accent-green: #10b981;
+  --accent-yellow: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-purple: #8b5cf6;
+  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+}
+
+/* App Shell */
+.app-shell {
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, #1e1b4b 100%);
+}
+
+/* Sidebar */
+.app-sider {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  height: 100vh !important;
+  overflow: hidden;
+}
+
+.app-sider .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-menu {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 8px;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.brand-logo img {
+  border-radius: 8px;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.brand-version {
+  font-size: 11px;
+  color: var(--accent-blue);
+  font-weight: 500;
+}
+
+/* Menu Styles */
+.app-menu {
+  background: transparent !important;
+  border-right: none !important;
+  padding: 0 8px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.app-menu .ant-menu-item {
+  margin: 4px 0 !important;
+  border-radius: var(--radius-md) !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  color: var(--text-secondary) !important;
+  transition: all 0.2s ease !important;
+}
+
+.app-menu .ant-menu-item:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+.app-menu .ant-menu-item-selected {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15)) !important;
+  color: var(--text-primary) !important;
+  border-left: 3px solid var(--accent-blue) !important;
+}
+
+.app-menu .ant-menu-item-divider {
+  margin: 12px 16px !important;
+  background: var(--border-color) !important;
+}
+
+/* Sidebar menu scrollbar */
+.app-menu::-webkit-scrollbar {
+  width: 4px;
+}
+
+.app-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.app-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Layout */
+.main-layout {
+  background: transparent;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-content {
+  padding: 24px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Important for flex child scrolling */
+}
+
+/* Footer */
+.app-footer {
+  background: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-color);
+  padding: 12px 24px !important;
   text-align: center;
+  color: var(--text-muted) !important;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  z-index: 100;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.footer-divider {
+  color: var(--border-color);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Loading & Error States */
+.center-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 60vh;
+  gap: 16px;
+}
+
+.error-state {
+  padding: 24px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--accent-red);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+/* ============================================
+   Task Manager Dashboard Styles
+   ============================================ */
+
+.task-manager {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.tm-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.tm-title-section {
+  flex: 1;
+  min-width: 280px;
+}
+
+.tm-title {
+  margin: 0 0 4px 0 !important;
+  color: var(--text-primary) !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tm-title .anticon {
+  color: var(--accent-blue);
+}
+
+.tm-subtitle {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.tm-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Tabs */
+.tm-tabs .ant-tabs-nav {
+  margin-bottom: 20px !important;
+}
+
+.tm-tabs .ant-tabs-tab {
+  padding: 12px 20px !important;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.tm-tabs .ant-tabs-tab:hover {
+  color: var(--accent-blue) !important;
+}
+
+.tm-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--accent-blue) !important;
+}
+
+.tm-tabs .ant-tabs-ink-bar {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)) !important;
+  height: 3px !important;
+  border-radius: 3px;
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.dashboard-card:hover {
+  border-color: var(--border-highlight) !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow), var(--shadow-lg);
+}
+
+.dashboard-card .ant-card-body {
+  padding: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Gauge Components */
+.gauge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.gauge-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.gauge-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.gauge-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gauge-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.temp-badge, .swap-info {
+  margin-top: 12px;
+}
+
+.swap-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Mini Stats */
+.io-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.mini-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.mini-stat-icon {
+  font-size: 20px;
+}
+
+.mini-stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.mini-stat-value {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.mini-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* CPU Cores Grid */
+.cores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+.core-item {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.core-label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+/* Disk List */
+.disk-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.disk-item {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.disk-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.disk-mount {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.disk-size {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Process Table & Search */
+.tm-processes {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.process-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.process-search {
+  max-width: 350px;
+  min-width: 250px;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.process-search input {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+.process-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.process-count {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.process-table {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.process-table .ant-table {
+  background: transparent !important;
+}
+
+.process-table .ant-table-thead > tr > th {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+.process-table .ant-table-tbody > tr > td {
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.process-table .ant-table-tbody > tr:hover > td {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+.process-name-cell {
+  display: flex;
+  align-items: center;
+}
+
+.process-name {
+  font-weight: 500;
+}
+
+.cpu-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cpu-cell .ant-progress {
+  flex: 1;
+  max-width: 60px;
+}
+
+.cpu-cell span {
+  font-size: 12px;
+  min-width: 45px;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* Summary Card */
+.summary-card {
+  margin-bottom: 0;
+}
+
+.summary-card .ant-statistic-title {
+  color: var(--text-secondary) !important;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Card Extra */
+.card-extra {
+  margin-left: auto;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Enhanced Disk List */
+.disk-list-enhanced {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.disk-item-enhanced {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.disk-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.disk-item-name {
+  display: flex;
+  align-items: center;
+}
+
+.disk-item-stats {
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+/* Core Item Enhancement */
+.core-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+/* Custom Descriptions for other pages */
+.custom-descriptions {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-lg);
+}
+
+.custom-descriptions .ant-descriptions-title {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15));
+  color: var(--text-primary);
+  padding: 16px 20px;
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.custom-descriptions .ant-descriptions-item-label {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  border-color: var(--border-color) !important;
+}
+
+.custom-descriptions .ant-descriptions-item-content {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .main-content {
+    padding: 16px;
+  }
+  
+  .tm-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .tm-title {
+    font-size: 22px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .main-content {
+    padding: 12px;
+  }
+  
+  .dashboard-card .ant-card-body {
+    padding: 16px;
+  }
+  
+  .process-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .process-search {
+    max-width: 100%;
+  }
+}
+
+/* ============================================
+   Component Section Styles
+   ============================================ */
+
+/* Section Container */
+.section-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.section-icon {
+  font-size: 32px;
+}
+
+/* Info Cards */
+.info-card {
+  background: var(--bg-card) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.info-card:hover {
+  border-color: var(--border-highlight) !important;
+  transform: translateY(-2px);
+}
+
+.info-card .ant-card-head {
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.info-card .ant-card-head-title {
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-card .ant-card-body {
+  padding: 20px;
+}
+
+/* Info Grid Layout */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.info-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-item-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-label-sm {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.info-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.info-value-sm {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+/* Stat Boxes */
+.stat-box {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--accent-blue);
+  text-align: center;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-box .ant-statistic-title {
+  color: var(--text-secondary) !important;
+  font-size: 11px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.stat-box .ant-statistic-content {
+  line-height: 1.2;
+}
+
+/* Speed Meters */
+.speed-meters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.speed-item {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+}
+
+.speed-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+/* Cache Items */
+.cache-item {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-blue);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Feature Tags */
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.feature-tag {
+  font-size: 12px;
+  padding: 4px 12px;
+}
+
+/* Card Title Row */
+.card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Gauge Card */
+.gauge-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+}
+
+/* Swap Stats */
+.swap-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.swap-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.swap-item:last-child {
+  border-bottom: none;
+}
+
+/* Module List */
+.module-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.module-item {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.module-details {
+  font-size: 12px;
+}
+
+/* UUID List */
+.uuid-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.uuid-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.uuid-value {
+  font-family: 'SFMono-Regular', Menlo, Monaco, monospace;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+/* Versions Grid */
+.versions-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.version-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.version-name {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.version-number {
+  color: var(--accent-blue);
+  font-family: monospace;
+}
+
+/* Drive Card */
+.drive-card .drive-header,
+.interface-card .interface-header,
+.gpu-card .gpu-header,
+.display-card .display-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.drive-title,
+.interface-title,
+.gpu-title,
+.display-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.drive-specs,
+.interface-details,
+.gpu-specs,
+.display-specs {
+  margin-top: 12px;
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* GPU Icon */
+.gpu-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
+  font-size: 18px;
 }
 
-.App-link {
-  color: #61dafb;
+/* Device Cards */
+.device-card .device-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.device-card .device-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.device-card .device-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* WiFi Card */
+.wifi-card .wifi-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.wifi-card .wifi-signal {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wifi-card .wifi-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wifi-card .wifi-quality {
+  margin: 12px 0;
+}
+
+.wifi-card .wifi-details {
+  margin-top: 12px;
+}
+
+.wifi-card .wifi-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Mini Stat (inline version) */
+.mini-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive for sections */
+@media (max-width: 768px) {
+  .section-header {
+    margin-bottom: 16px;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .section-icon {
+    font-size: 24px;
+  }
+  
+  .info-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  
+  .info-card .ant-card-body {
+    padding: 16px;
   }
 }
+
+@media (max-width: 576px) {
+  .info-grid,
+  .info-grid-compact {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-box {
+    padding: 12px;
+  }
+}
+
+/* ============================================
+   Disk Usage Grid Layout
+   ============================================ */
+
+.disk-usage-card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.disk-usage-card .card-header-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.disk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.disk-grid-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  min-height: 200px;
+}
+
+.disk-grid-item:hover {
+  border-color: var(--border-highlight);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.disk-grid-item.main-drive {
+  border-color: var(--accent-blue);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.disk-grid-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.disk-mount-name {
+  max-width: 100px;
+  font-size: 13px;
+}
+
+.disk-type-tag {
+  font-size: 10px !important;
+  padding: 0 6px !important;
+  line-height: 18px !important;
+}
+
+.disk-grid-gauge {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.disk-grid-stats {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.disk-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.disk-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+}
+
+/* Card Header Actions */
+.card-header-actions .ant-tag {
+  cursor: pointer;
+  user-select: none;
+}
+
+.card-header-actions .ant-tag:hover {
+  opacity: 0.8;
+}
+
+/* Info Card Equal Heights for CPU */
+.info-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-card .ant-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive disk grid */
+@media (max-width: 768px) {
+  .disk-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  
+  .disk-grid-item {
+    min-height: 180px;
+    padding: 10px;
+  }
+}
+

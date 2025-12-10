@@ -1,83 +1,107 @@
+/* Base Body Styles - SysPeek Professional Theme */
 body {
-  
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #0a0f1a;
+  color: #f1f5f9;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #1a4c7b;
+html, body, #root {
+  height: 100%;
+  min-height: 100vh;
 }
+
 a {
-  color: yellow;
-  
+  color: #60a5fa;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
-/* Handle on hover */
+
+a:hover {
+  color: #93c5fd;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.4);
+  border-radius: 4px;
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: rgba(59, 130, 246, 0.6);
 }
-.custom-descriptions .ant-descriptions-item-label {
-  width: 15%;
+
+/* Selection */
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #f1f5f9;
 }
-.custom-menu {
+
+/* Ant Design Menu Override */
+.custom-menu, .app-menu {
   user-select: none;
 }
-.site-layout {
-  background-color: black;
+
+/* Legacy description styles - updated for new theme */
+.custom-descriptions .ant-descriptions-item-label {
+  width: 22%;
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: rgba(241, 245, 249, 0.7) !important;
+  font-weight: 500;
+  border-color: rgba(255, 255, 255, 0.06) !important;
 }
 
-:where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark .ant-menu-item-selected, :where(.css-dev-only-do-not-override-1vr7spz).ant-menu-dark>.ant-menu .ant-menu-item-selected {
-  background-color: #1a4c7b;
-}
-
-.ant-descriptions.ant-descriptions-bordered >.ant-descriptions-view .ant-descriptions-row >.ant-descriptions-item-label {
-  background-color: #1a4c7b; 
-  color: white;
-  box-shadow: 0 2px 4px rgb(242, 242, 242);
-}
 .custom-descriptions .ant-descriptions-item-content {
-  width: 45%;
-  background-color: #001529;
-  color: white;
-  box-shadow: 0 2px 4px rgb(242, 242, 242);
+  width: 50%;
+  background: transparent !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
 }
-.footer {
-  background-color: #1a4c7b;
-  color: white;
-}
-.table-custom {
-  background-color: #1c4461;
-  color: black;
-}
+
 .custom-descriptions .ant-descriptions-title {
-  background-color: #1c4461;
-  color: white;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  text-align: center;
-  font-size: large;
-  font-weight: bold;
-  margin-bottom: -21px;
-  box-shadow: 0 2px 4px rgb(242, 242, 242);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.15));
+  color: #f1f5f9;
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
 }
+
 .custom-descriptions {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  margin-bottom: 35px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
+
+.table-custom {
+  background: rgba(15, 23, 42, 0.6);
+  color: #f1f5f9;
+  border-radius: 12px;
+}
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Courier New', monospace;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
 }

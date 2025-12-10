@@ -1,7 +1,7 @@
 
 import './App.css';
-import { Layout, Menu } from 'antd';
-import { useEffect, useState } from 'react';
+import { Layout, Menu, Spin, Grid, Typography, ConfigProvider, theme } from 'antd';
+import { useEffect, useMemo, useState, useCallback, memo } from 'react';
 import SystemInfo from './Components/SystemInfo/SystemInfo';
 import CPU from './Components/CPU/CPU';
 import MemoryInfo from './Components/MemoryInfo/MemoryInfo';
@@ -12,21 +12,86 @@ import StorageDevices from './Components/StorageDevices/StorageDevices';
 import NetworkInterfaces from './Components/NetworkInterfaces/NetworkInterfaces';
 import WifiNetworks from './Components/WifiNetworks/WifiNetworks';
 import Display from './Components/Display/Display';
-import Home from './Components/Home/Home';
 import Audio from './Components/Audio/Audio';
 import Bluetooth from './Components/Bluetooth/Bluetooth';
 import Printers from './Components/Printers/Printers';
 import USB from './Components/USB/USB';
+import TaskManager from './Components/TaskManager/TaskManager';
+import About from './Components/About/About';
+import {
+  DashboardOutlined,
+  DesktopOutlined,
+  HddOutlined,
+  ThunderboltOutlined,
+  PictureOutlined,
+  SettingOutlined,
+  DatabaseOutlined,
+  WifiOutlined,
+  GlobalOutlined,
+  SoundOutlined,
+  PrinterOutlined,
+  UsbOutlined,
+  InfoCircleOutlined,
+  AppleOutlined,
+  QuestionCircleOutlined
+} from '@ant-design/icons';
+
 const { Footer, Sider, Content } = Layout;
+const { useBreakpoint } = Grid;
 const si = window.require('systeminformation');
 const { ipcRenderer } = window.require('electron');
+const packageJson = require('../package.json');
+
+// App version and info
+const APP_VERSION = packageJson.version;
+const APP_NAME = 'SysPeek';
+
+// Menu items with icons
+const menuConfig = [
+  { key: 'dashboard', label: 'Dashboard', icon: <DashboardOutlined /> },
+  { type: 'divider' },
+  { key: 'system', label: 'System Info', icon: <InfoCircleOutlined /> },
+  { key: 'cpu', label: 'CPU', icon: <ThunderboltOutlined /> },
+  { key: 'memory', label: 'Memory', icon: <DatabaseOutlined /> },
+  { key: 'graphics', label: 'Graphics', icon: <DesktopOutlined /> },
+  { key: 'display', label: 'Display', icon: <PictureOutlined /> },
+  { key: 'storage', label: 'Storage', icon: <HddOutlined /> },
+  { type: 'divider' },
+  { key: 'network', label: 'Network', icon: <GlobalOutlined /> },
+  { key: 'wifi', label: 'WiFi', icon: <WifiOutlined /> },
+  { type: 'divider' },
+  { key: 'battery', label: 'Battery', icon: <ThunderboltOutlined /> },
+  { key: 'os', label: 'OS', icon: <AppleOutlined /> },
+  { type: 'divider' },
+  { key: 'audio', label: 'Audio', icon: <SoundOutlined /> },
+  { key: 'bluetooth', label: 'Bluetooth', icon: <SettingOutlined /> },
+  { key: 'printers', label: 'Printers', icon: <PrinterOutlined /> },
+  { key: 'usb', label: 'USB', icon: <UsbOutlined /> },
+  { type: 'divider' },
+  { key: 'about', label: 'About', icon: <QuestionCircleOutlined /> },
+];
+
 function App() {
   const [siObject, setsiObject] = useState(null);
-  const [selectedMenuItemKey, setSelectedMenuItemKey] = useState('11');
-  const handleMenuChange = (selectedKey) => {
-    setSelectedMenuItemKey(selectedKey);
-  };
-  const obj = {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedKey, setSelectedKey] = useState('dashboard');
+  const [collapsed, setCollapsed] = useState(false);
+  const [systemArch, setSystemArch] = useState('');
+  const screens = useBreakpoint();
+
+  // Fetch system architecture on mount
+  useEffect(() => {
+    si.osInfo().then(info => {
+      setSystemArch(info.arch || process.arch);
+    }).catch(() => {
+      setSystemArch(process.arch);
+    });
+  }, []);
+
+  const handleMenuChange = useCallback((e) => setSelectedKey(e.key), []);
+
+  const systemInfoQuery = useMemo(() => ({
     cpu: '*',
     cpuCache: '*',
     mem: '*',
@@ -49,251 +114,163 @@ function App() {
     bluetoothDevices: '*',
     printer: '*',
     usb: '*'
-  }
+  }), []);
+
   useEffect(() => {
-    si.get(obj)
-      .then(data => {
+    setCollapsed(!screens.lg);
+  }, [screens]);
 
+  useEffect(() => {
+    let mounted = true;
+
+    const load = async () => {
+      try {
+        const data = await si.get(systemInfoQuery);
+        if (!mounted) return;
         setsiObject(data);
-
-
+        setLoading(false);
         ipcRenderer.send('async-operation-complete');
-      });
-  }, []);
+      } catch (err) {
+        setError(err.message || 'Failed to load system info');
+        setLoading(false);
+        ipcRenderer.send('async-operation-complete');
+      }
+    };
+    load();
+    return () => { mounted = false; };
+  }, [systemInfoQuery]);
+
+  const menuItems = useMemo(() =>
+    menuConfig.map(item =>
+      item.type === 'divider'
+        ? { type: 'divider' }
+        : {
+            key: item.key,
+            icon: item.icon,
+            label: item.label,
+          }
+    ),
+    []
+  );
+
+  const renderContent = useCallback(() => {
+    if (selectedKey === 'dashboard') {
+      return <TaskManager />;
+    }
+
+    if (loading) {
+      return (
+        <div className="center-loading">
+          <Spin size="large" tip="Loading system information..." />
+        </div>
+      );
+    }
+
+    if (error) {
+      return <div className="error-state">{error}</div>;
+    }
+
+    switch (selectedKey) {
+      case 'system': return <SystemInfo siData={siObject} />;
+      case 'cpu': return <CPU siData={siObject} />;
+      case 'memory': return <MemoryInfo siData={siObject} />;
+      case 'graphics': return <Graphics siData={siObject} />;
+      case 'display': return <Display siData={siObject} />;
+      case 'storage': return <StorageDevices siData={siObject} />;
+      case 'network': return <NetworkInterfaces siData={siObject} />;
+      case 'wifi': return <WifiNetworks siData={siObject} />;
+      case 'battery': return <Battery siData={siObject} />;
+      case 'os': return <OS siData={siObject} />;
+      case 'audio': return <Audio siData={siObject} />;
+      case 'bluetooth': return <Bluetooth siData={siObject} />;
+      case 'printers': return <Printers siData={siObject} />;
+      case 'usb': return <USB siData={siObject} />;
+      case 'about': return <About version={APP_VERSION} arch={systemArch} />;
+      default: return <TaskManager />;
+    }
+  }, [selectedKey, loading, error, siObject]);
+
+  const darkTheme = {
+    algorithm: theme.darkAlgorithm,
+    token: {
+      colorPrimary: '#3b82f6',
+      colorBgContainer: 'rgba(15, 23, 42, 0.8)',
+      colorBgElevated: 'rgba(15, 23, 42, 0.95)',
+      colorBorder: 'rgba(255, 255, 255, 0.08)',
+      colorText: '#e2e8f0',
+      colorTextSecondary: 'rgba(226, 232, 240, 0.7)',
+      borderRadius: 12,
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    },
+    components: {
+      Menu: {
+        darkItemBg: 'transparent',
+        darkSubMenuItemBg: 'transparent',
+        darkItemSelectedBg: 'rgba(59, 130, 246, 0.2)',
+        darkItemHoverBg: 'rgba(255, 255, 255, 0.05)',
+      },
+      Card: {
+        colorBgContainer: 'rgba(15, 23, 42, 0.6)',
+      },
+      Table: {
+        colorBgContainer: 'rgba(15, 23, 42, 0.4)',
+        headerBg: 'rgba(15, 23, 42, 0.8)',
+      },
+    },
+  };
 
   return (
-
-    <Layout hasSider>
-      
-      <Sider
-        className='sider'
-        style={{
-          overflow: 'auto',
-          height: '100%',
-          width: '100%',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          bottom: 0,
-        }}
-      >
-        <div className="demo-logo-vertical" align="center" ><img style={{ marginBottom: '10px', marginTop: '20px' }} align="center" src='logo192.png' height={80} width={90} alt='logo' /></div>
-        {selectedMenuItemKey !== null ? (
-          <Menu
-            className='custom-menu'
-            mode="vertical"
-            theme='dark'
-            defaultSelectedKeys={selectedMenuItemKey}
-            onSelect={(e) => handleMenuChange(e.key)}
-            style={{
-              height: '100%',
-            }}
-            selectedKeys={selectedMenuItemKey}
-          >
-            <Menu.Item key="11">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/home.png' height={25} width={25}>
-                </img>
-              </span>
-              HomePage
-            </Menu.Item>
-
-            <Menu.Item key="1">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/system-info.png' height={25} width={25}>
-                </img>
-              </span>
-              System Info
-            </Menu.Item>
-
-            <Menu.Item key="2">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/cpu.png' height={25} width={25}>
-                </img>
-              </span>
-              CPU
-            </Menu.Item>
-
-            <Menu.Item key="3">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/ram.png' height={25} width={25}>
-                </img>
-              </span>
-              Memory
-            </Menu.Item>
-
-            <Menu.Item key="4">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/gpu.png' height={25} width={25}></img>
-              </span>
-              Graphics
-            </Menu.Item>
-
-            <Menu.Item key="10">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/display.png' height={25} width={25}>
-                </img>
-              </span>
-              Display
-            </Menu.Item>
-
-            <Menu.Item key="5">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/battery.png' height={25} width={25}>
-                </img>
-              </span>
-              Battery
-            </Menu.Item>
-
-            <Menu.Item key="6">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/windows.png' height={25} width={25}>
-                </img>
-              </span>
-              OS
-            </Menu.Item>
-
-            <Menu.Item key="7">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/hdd.png' height={25} width={25}>
-                </img>
-              </span>
-              Storage Devices
-            </Menu.Item>
-
-            <Menu.Item key="8">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/computer-networks.png' height={25} width={25}>
-                </img>
-              </span>
-              Network IF
-            </Menu.Item>
-
-            <Menu.Item key="9">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/wifi.png' height={25} width={25}>
-                </img>
-              </span>
-              Wifi Networks
-            </Menu.Item>
-
-            <Menu.Item key="12">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/audio.png' height={25} width={25}>
-                </img>
-              </span>
-              Audio
-            </Menu.Item>
-
-            <Menu.Item key="13">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/bluetooth.png' height={25} width={25}>
-                </img>
-              </span>
-              Bluetooth Devices
-            </Menu.Item>
-
-            <Menu.Item key="14">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/printer.png' height={25} width={25}>
-                </img>
-              </span>
-              Printers
-            </Menu.Item>
-
-            <Menu.Item key="15">
-              <span >
-                <img style={{ marginRight: '10px', marginBottom: '-7px' }} src='menuIcons/usb.png' height={25} width={25}>
-                </img>
-              </span>
-              USB Devices
-            </Menu.Item>
-
-          </Menu>
-        ) : null}
-      </Sider>
-      <Layout
-        className="site-layout"
-        style={{
-          marginLeft: 200,
-          // background: 'white',
-
-        }}
-      >
-        {/* <Header
-          style={{
-            position: 'fixed',
-            padding: 0,
-            background: 'black',
-          }}
-        /> */}
-        <Content
-          style={{
-            margin: '24px 16px 0',
-            overflow: 'initial',
-            justifyContent: 'center',
-
-          }}
-        ><div >
-            {selectedMenuItemKey === '1' ?
-              <SystemInfo siData={siObject} />
-              :
-              selectedMenuItemKey === '2' ?
-                <CPU siData={siObject} />
-                :
-                selectedMenuItemKey === '3' ?
-                  <MemoryInfo siData={siObject} />
-                  :
-                  selectedMenuItemKey === '4' ?
-                    <Graphics siData={siObject} />
-                    :
-                    selectedMenuItemKey === '5' ?
-                      <Battery siData={siObject} />
-                      :
-                      selectedMenuItemKey === '6' ?
-                        <OS siData={siObject} />
-                        :
-                        selectedMenuItemKey === '7' ?
-                          <StorageDevices siData={siObject} />
-                          :
-                          selectedMenuItemKey === '8' ?
-                            <NetworkInterfaces siData={siObject} />
-                            :
-                            selectedMenuItemKey === '9' ?
-                              <WifiNetworks siData={siObject} />
-                              :
-                              selectedMenuItemKey === '10' ?
-                                <Display siData={siObject} />
-                                :
-                                selectedMenuItemKey === '11' ?
-                                  <Home />
-                                  :
-                                  selectedMenuItemKey === '12' ?
-                                    <Audio siData={siObject} />
-                                    :
-                                    selectedMenuItemKey === '13' ?
-                                      <Bluetooth siData={siObject} />
-                                      :
-                                      selectedMenuItemKey === '14' ?
-                                      <Printers siData={siObject} />
-                                      :
-                                      selectedMenuItemKey === '15' ?
-                                      <USB siData={siObject} />
-                                      :
-                                      null}
-          </div>
-        </Content>
-        <Footer
-          className='footer'
-          style={{
-            textAlign: 'center',
-          }}
+    <ConfigProvider theme={darkTheme}>
+      <Layout className="app-shell">
+        <Sider
+          className="app-sider"
+          collapsible
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          breakpoint="lg"
+          width={240}
+          collapsedWidth={80}
         >
-          v0.1.8 SYSPeek - System Information Viewer {new Date().getFullYear()} Made With ❤ By Muhammad Sheharyar Butt
-        </Footer>
+          <div className="brand">
+            <div className="brand-logo">
+              <img src='logo192.png' height={40} width={40} alt='SysPeek' />
+            </div>
+            {!collapsed && (
+              <div className="brand-info">
+                <span className="brand-name">{APP_NAME}</span>
+                <span className="brand-version">v{APP_VERSION}</span>
+              </div>
+            )}
+          </div>
+          <Menu
+            className='app-menu'
+            mode="inline"
+            theme='dark'
+            selectedKeys={[selectedKey]}
+            onClick={handleMenuChange}
+            items={menuItems}
+          />
+        </Sider>
+        <Layout className="main-layout">
+          <Content className="main-content">
+            {renderContent()}
+          </Content>
+          <Footer className='app-footer'>
+            <span>{APP_NAME} v{APP_VERSION}</span>
+            <span className="footer-divider">•</span>
+            <span>{systemArch}</span>
+            <span className="footer-divider">•</span>
+            <span>{new Date().getFullYear()}</span>
+            <span className="footer-divider">•</span>
+            <span>Made with ❤️ by <span 
+              style={{ color: '#3b82f6', cursor: 'pointer' }}
+              onClick={() => ipcRenderer.send('open-external-link', 'https://github.com/shehari007')}
+            >Muhammad Sheharyar Butt</span></span>
+          </Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 }
 
-export default App;
+export default memo(App);

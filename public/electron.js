@@ -2,13 +2,17 @@
 const { app, BrowserWindow, protocol, ipcMain, shell } = require("electron");
 const path = require("path");
 const url = require("url");
+const packageJson = require("../package.json");
+
+const APP_VERSION = packageJson.version;
+const APP_NAME = packageJson.name || "SysPeek";
 
 // Create the native browser window.
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1280,
     height: 720,
-    
+    title: `SysPeek - System Information Viewer v${APP_VERSION}`,
     // Set the path of an additional "preload" script that can be used to
     // communicate between node-land and browser-land.
     webPreferences: {
@@ -23,6 +27,17 @@ function createWindow() {
 
   splash = new BrowserWindow({ width: 810, height: 610, transparent: true, frame: false, alwaysOnTop: true });
   splash.loadURL(`file://${__dirname}/splash.html`);
+  let splashClosed = false;
+  const closeSplash = () => {
+    if (splash && !splashClosed) {
+      splashClosed = true;
+      splash.destroy();
+      mainWindow.maximize();
+      mainWindow.show();
+    }
+  };
+
+  // Splash closes when renderer signals data load complete
   // In production, set the initial browser path to the local bundle generated
   // by the Create React App build process.
   // In development, set it to localhost to allow live/hot-reloading.
@@ -37,9 +52,7 @@ function createWindow() {
   mainWindow.setMenu(null)
 
   ipcMain.on('async-operation-complete', () => {
-    // Close the splash screen and show the main window
-    splash.destroy();
-    mainWindow.show();
+    closeSplash();
   });
 
   // Automatically open Chrome's DevTools in development mode.

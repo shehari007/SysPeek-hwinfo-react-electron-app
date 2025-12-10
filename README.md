@@ -20,85 +20,77 @@
 
 # SysPeek System Information Viewer
 
-With SysPeek, users can quickly access vital information about their system, including details about the CPU, memory, storage, operating system, network connections, and more. This user-friendly tool offers a straightforward interface, making it easy for both novice and experienced users.
+SysPeek is a modern Electron + React desktop app to inspect and monitor your machine in one place. The new glassmorphism UI delivers a Task Manager-style home, responsive layout, and quick access to CPU, memory, storage, network, and peripherals with live metrics.
 
 ## Tech Stack
 
-**CLIENT:** React, Hooks, Ant Design 5+, Electron, Node
+**CLIENT:** React 18, Hooks, Ant Design 5, Electron, Recharts/Chart.js
 
-**SYSTEM API:** SystemInformation npm package from -> (https://systeminformation.io/)
+**SYSTEM API:** [systeminformation](https://systeminformation.io/)
+
+**Key Dependencies (current):** Electron 26.2.1, React 18.2.0, Ant Design 5.9.2, systeminformation 5.27.13, Recharts/Chart.js
 
 
 ## Features
 
-- Get detailed insights into your computer's hardware components.
--  Access info about your OS, Hardware, software, and drivers and many more.
-- Monitor CPU, disk, and network usage in real-time. _(in progress..)_
-- View IP, DNS, and network adapters information.
-- Check disk space and file system details.
-- Show current detected Bluetooth, WiFi, Printers, USB Devices.
-- Deployable on Windows, Linux, macOS 
+- Live Task Manager-style dashboard with CPU, memory, disk I/O, network, uptime, and per-core load
+- Detailed pages for System, CPU, Memory, Graphics, Display, Storage, Network, WiFi, Battery, Audio, Bluetooth, Printers, USB
+- Disk grid with system-drive toggle, WiFi scanner, and process list with sorting/search
+- Dynamic version/architecture display and About screen with credits and tech stack
+- Sticky footer and responsive sider with scroll for long menus
+- Cross-platform: Windows, macOS, Linux
 
 ## Screenshots
 
-<details>
-  <summary>See SS here.</summary>
-  <div align="center">
-  <h4>App View</h4>
-  <img src="https://github.com/shehari007/SysPeek-hwinfo-react-electron-app/blob/main/screenshots/syspeek%20(1).png?raw=true" name="image-1">
-  <h4>Home (About) View</h4>
-  <img src="https://github.com/shehari007/SysPeek-hwinfo-react-electron-app/blob/main/screenshots/syspeek%20(2).png?raw=true" name="image-2">
-  </div>
-</details>
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="./screenshots/1.png" alt="SysPeek Dashboard" width="100%">
+        <br>
+        <em>Task Manager Dashboard - Live system metrics at a glance</em>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <img src="./screenshots/2.png" alt="SysPeek Details View" width="100%">
+        <br>
+        <em>Detailed Hardware Information View</em>
+      </td>
+    </tr>
+  </table>
+</div>
 
-## Pre Requirements For Local Development
+## Getting Started (dev)
 
-- React 18+
-- Node, NPM
-- Python with pip
-- VSCODE With ES6+ Module
-## Installation
-
-Clone the project
+Prereqs: Node 18+, npm
 
 ```bash
 git clone https://github.com/shehari007/SysPeek-hwinfo-react-electron-app.git
-```
-
-Go to the project directory
-
-```bash
-cd SysPeek-hwinfo-ract-electron-app
-```
-
-Install dependencies
-
-```bash
+cd SysPeek-hwinfo-react-electron-app
 npm install
-```
-
-Start the Electron Project in Windows
-
-```bash
 npm run electron:start
 ```
-Project will open in window mode not in browser as normal react app would, Happy Hacking!
-## Deployment
+The app opens in Electron (not the browser). Happy hacking!
+## Build / Package
 
-Deployment is never been easy before, package.json is already configured for every platform (Window, Linux, MacOs). Just need to run build commands for each platform as follows:
-## For Windows
+Configured for Windows, Linux, macOS. Run one of:
+
 ```bash
-npm run electron:package:win
+npm run electron:package:win    # Windows (.exe)
+npm run electron:package:linux  # Linux (.deb)
+npm run electron:package:mac    # macOS (.dmg)
 ```
-## For Linux
-```bash
-npm run electron:package:linux
-```
-## For MacOS
-```bash
-npm run electron:package:mac
-```
-Running these commands will give you a package file (Windows->NSIS .exe) || (Linux->.deb) || (macOS->.dmg).
+
+## Changelog
+
+### 1.1.0
+- New glassmorphism UI, sticky footer, scrollable sidebar
+- Task Manager homepage with live CPU/memory/disk/net, per-core gauges, process search and sorting
+- Disk grid with system-drive toggle; WiFi scanner improvements
+- Dynamic version/architecture display and About page with GitHub/profile links
+- Splash flow refinements and maximized main window on start
+- Dependencies refreshed: Electron 26.2.x, Ant Design 5.9.x, systeminformation 5.27.x
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
