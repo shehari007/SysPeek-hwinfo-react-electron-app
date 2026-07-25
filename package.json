@@ -1,90 +1,69 @@
 {
   "name": "syspeek-systeminfo-viewer",
-  "version": "1.1.0",
-  "author": "Muhammad Sheharyar Butt",
-  "description": "Detailed System information viewer",
+  "version": "2.0.0",
+  "author": {
+    "name": "Muhammad Sheharyar Butt",
+    "email": "shehariyar@gmail.com",
+    "url": "https://github.com/shehari007"
+  },
+  "description": "SysPeek is a modern, secure cross platform desktop app for detailed system information and live hardware monitoring.",
+  "license": "MIT",
   "private": true,
-  "main": "./public/electron.js",
-  "homepage": "./",
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "antd": "^5.9.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "systeminformation": "^5.27.13",
-    "web-vitals": "^2.1.4"
+  "main": "./out/main/index.js",
+  "homepage": "https://github.com/shehari007/SysPeek-hwinfo-react-electron-app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shehari007/SysPeek-hwinfo-react-electron-app.git"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron:start": "concurrently -k \"cross-env BROWSER=none npm start\" \"wait-on http://127.0.0.1:3000 && electron . --force_high_performance_gpu\"",
-    "electron:package:mac": "npm run build && electron-builder -m -c.extraMetadata.main=build/electron.js",
-    "electron:package:win": "npm run build && electron-builder -w -c.extraMetadata.main=build/electron.js",
-    "electron:package:linux": "npm run build && electron-builder -l -c.extraMetadata.main=build/electron.js"
+    "dev": "electron-vite dev --watch",
+    "start": "electron-vite preview",
+    "build": "electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,css,md,yml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,css,md,yml}\"",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux",
+    "release": "npm run build && electron-builder --publish always"
   },
-  "build": {
-    "appId": "com.electron.syspeek",
-    "productName": "SysPeek system information viewer",
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "public"
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "public/logo512.png"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": ["x64"]
-        }
-      ],
-      "icon": "public/logo192.png"
-    },
-    "nsis": {
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false
-    },
-    "linux": {
-      "target": "deb",
-      "icon": "public/logo192.png"
-    }
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      "last 1 electron version",
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 electron version",
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "electron-store": "^8.2.0",
+    "electron-updater": "^6.8.9",
+    "systeminformation": "^5.33.1"
   },
   "devDependencies": {
-    "concurrently": "^8.2.1",
-    "cross-env": "^7.0.3",
-    "electron": "^26.2.1",
-    "electron-builder": "^24.6.4",
-    "electronmon": "^2.0.2",
-    "wait-on": "^7.0.1"
+    "@ant-design/icons": "^6.3.2",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.2.0",
+    "antd": "^6.5.2",
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^5.0.0",
+    "eslint": "^10.7.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
+    "uplot": "^1.6.32",
+    "uplot-react": "^1.2.4",
+    "vite": "^7.3.6"
   }
 }

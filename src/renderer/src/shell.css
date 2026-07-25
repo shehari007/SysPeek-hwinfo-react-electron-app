@@ -1,0 +1,398 @@
+/* ============================================
+   SysPeek shell: sidebar brand + footer status bar
+   Loaded after App.css so it refines those blocks.
+   ============================================ */
+
+/* ---------- Page header stat row ----------
+   Deterministic column counts. An auto-fit grid whose minimum track equals the
+   exact width needed for N columns drops to N-1 on any sub-pixel shortfall and
+   strands the last stat, so the count is pinned here and stepped down by
+   breakpoint instead. */
+
+.page-header-stats {
+  display: grid !important;
+  gap: 10px;
+}
+
+.ph-stats-1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+.ph-stats-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.ph-stats-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.ph-stats-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1180px) {
+  .ph-stats-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .ph-stats-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .ph-stats-2,
+  .ph-stats-3,
+  .ph-stats-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .ph-stats-2,
+  .ph-stats-3,
+  .ph-stats-4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Sidebar brand ---------- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 14px;
+  border-bottom: 1px solid var(--ds-line, rgba(148, 176, 224, 0.12));
+  min-height: 78px;
+}
+
+.brand-collapsed {
+  justify-content: center;
+  padding: 16px 8px;
+  gap: 0;
+}
+
+.brand-logo {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 12px;
+  padding: 4px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(139, 92, 246, 0.14));
+  border: 1px solid rgba(124, 196, 255, 0.2);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.18);
+}
+
+.brand-logo img {
+  display: block;
+  border-radius: 8px;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.brand-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.2px;
+  line-height: 1.1;
+  color: var(--ds-ink, #eaf1fb);
+}
+
+.brand-elevated-icon {
+  font-size: 12px;
+  color: #5dd39e;
+}
+
+.brand-chips {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.brand-chip {
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  /* Deliberately not uppercased: "v2.0.0" and "x64" are conventionally lowercase. */
+  color: var(--ds-ink-2, rgba(226, 236, 250, 0.66));
+  background: var(--ds-surface-2, rgba(23, 33, 54, 0.6));
+  border: 1px solid var(--ds-line, rgba(148, 176, 224, 0.12));
+  font-variant-numeric: tabular-nums;
+}
+
+.brand-chip-version {
+  color: #7cc4ff;
+  background: rgba(124, 196, 255, 0.12);
+  border-color: rgba(124, 196, 255, 0.32);
+}
+
+.brand-platform {
+  font-size: 11px;
+  color: var(--ds-ink-3, rgba(226, 236, 250, 0.42));
+  line-height: 1.2;
+}
+
+/* ---------- Sidebar collapse trigger ----------
+   antd paints this element itself and its default is the dark theme. The Sider
+   now receives a theme prop, and these rules pin it to our own surfaces so it
+   matches the sidebar in both themes. */
+
+.app-sider .ant-layout-sider-trigger {
+  background: var(--ds-surface-2, rgba(23, 33, 54, 0.6)) !important;
+  color: var(--ds-ink-2, rgba(226, 236, 250, 0.66)) !important;
+  border-top: 1px solid var(--ds-line, rgba(148, 176, 224, 0.12));
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.app-sider .ant-layout-sider-trigger:hover {
+  background: var(--ds-surface-raise, rgba(30, 41, 66, 0.85)) !important;
+  color: var(--ds-ink, #eaf1fb) !important;
+}
+
+:root[data-theme='light'] .app-sider .ant-layout-sider-trigger {
+  background: #f1f5fa !important;
+  color: rgba(15, 23, 42, 0.7) !important;
+}
+
+:root[data-theme='light'] .app-sider .ant-layout-sider-trigger:hover {
+  background: #e6ecf6 !important;
+  color: #0f172a !important;
+}
+
+/* ---------- Footer status bar ---------- */
+
+/* App.css styles this as a centered flex row, which would squeeze the status bar.
+   The status bar owns its own layout, so reset the wrapper to a plain block. */
+.app-footer {
+  display: block !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-top: 1px solid var(--ds-line, rgba(148, 176, 224, 0.12));
+  text-align: left !important;
+  flex-shrink: 0;
+}
+
+/* Opaque on purpose. A translucent bar composites against the page background,
+   which made it read as muddy navy in light mode. */
+.statusbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 9px 18px;
+  font-size: 12px;
+  color: var(--ds-ink-2, rgba(226, 236, 250, 0.66));
+  background: #0e1626;
+}
+
+:root[data-theme='light'] .statusbar {
+  background: #f4f7fc;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.statusbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.statusbar-brand {
+  font-weight: 750;
+  letter-spacing: -0.2px;
+  color: var(--ds-ink, #eaf1fb);
+}
+
+.statusbar-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 650;
+  background: var(--ds-surface-2, rgba(23, 33, 54, 0.6));
+  border: 1px solid var(--ds-line, rgba(148, 176, 224, 0.12));
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.statusbar-tag-accent {
+  color: #7cc4ff;
+  background: rgba(124, 196, 255, 0.12);
+  border-color: rgba(124, 196, 255, 0.32);
+}
+
+.statusbar-tag-good {
+  color: #5dd39e;
+  background: rgba(93, 211, 158, 0.12);
+  border-color: rgba(93, 211, 158, 0.34);
+}
+
+.statusbar-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--ds-line-strong, rgba(148, 176, 224, 0.22));
+  flex-shrink: 0;
+}
+
+.statusbar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.statusbar-item .anticon {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+.statusbar-dim {
+  color: var(--ds-ink-3, rgba(226, 236, 250, 0.42));
+}
+
+.statusbar-host {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.statusbar-host .statusbar-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusbar-live {
+  gap: 12px;
+}
+
+.statusbar-credit {
+  margin-left: auto;
+  gap: 5px;
+}
+
+.statusbar-heart {
+  color: #ef4444;
+  font-size: 10px;
+}
+
+.statusbar-author {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #7cc4ff;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.statusbar-author:hover {
+  background: rgba(124, 196, 255, 0.12);
+  color: #a5d8ff;
+}
+
+.statusbar-author:focus-visible {
+  outline: 2px solid rgba(124, 196, 255, 0.65);
+  outline-offset: 1px;
+}
+
+/* ---------- Light theme: accent-colored value text ----------
+   Every page passes its accent hue down as an inline color for KPI numbers
+   (yellow #ffd666, mint #5dd39e, sky #7cc4ff, violet #b37feb and friends). Those
+   hues are chosen for a dark surface; on white they measure 1.3:1 to 2.9:1, which
+   is unreadable. The color arrives as an inline style, so CSS cannot recolor it
+   directly, but it can post-process it: this darkens and slightly saturates the
+   rendered glyphs, which lifts every one of those hues past the 3:1 bar for large
+   bold text while keeping each accent recognisable. Light mode only, so the dark
+   theme renders byte-identically. */
+
+:root[data-theme='light'] .page-header-stat-value,
+:root[data-theme='light'] .ds-stat-value,
+:root[data-theme='light'] .mini-stat-value,
+:root[data-theme='light'] .ds-meter-right,
+:root[data-theme='light'] .ant-statistic-content-value {
+  filter: brightness(0.58) saturate(1.25);
+}
+
+/* ---------- Light theme contrast corrections ----------
+   The accent inks used for small text are tuned for a dark surface. On white
+   they fall well below 4.5:1, so they are darkened here. */
+
+:root[data-theme='light'] .brand-chip-version {
+  color: #1d4ed8;
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+:root[data-theme='light'] .brand-logo {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.14), rgba(139, 92, 246, 0.1));
+  border-color: rgba(37, 99, 235, 0.22);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+:root[data-theme='light'] .statusbar-tag-accent {
+  color: #1d4ed8;
+  background: rgba(37, 99, 235, 0.1);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+:root[data-theme='light'] .statusbar-tag-good {
+  color: #0f8f5f;
+  background: rgba(15, 143, 95, 0.1);
+  border-color: rgba(15, 143, 95, 0.32);
+}
+
+:root[data-theme='light'] .statusbar-author {
+  color: #1d4ed8;
+}
+
+:root[data-theme='light'] .statusbar-author:hover {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1e3a8a;
+}
+
+/* Narrow windows: shed the least important groups first. */
+@media (max-width: 1080px) {
+  .statusbar-host {
+    display: none;
+  }
+  .statusbar-sep {
+    display: none;
+  }
+}
+
+@media (max-width: 780px) {
+  .statusbar-live .statusbar-dim {
+    display: none;
+  }
+  .statusbar-credit .statusbar-dim {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .statusbar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .statusbar-live {
+    display: none;
+  }
+}

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Starting SysPeek</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        overflow: hidden;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+      .stage {
+        position: absolute;
+        inset: 14px;
+        border-radius: 24px;
+        background:
+          radial-gradient(120% 100% at 15% 0%, #16406b 0%, #0d1b30 42%, #070d18 100%);
+        border: 1px solid rgba(124, 196, 255, 0.16);
+        box-shadow:
+          0 30px 90px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #e8f1ff;
+      }
+      /* soft moving light blobs */
+      .stage::before,
+      .stage::after {
+        content: '';
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      .stage::before {
+        background: radial-gradient(circle, #2f80ed, transparent 65%);
+        top: -120px;
+        left: -80px;
+        animation: drift1 9s ease-in-out infinite;
+      }
+      .stage::after {
+        background: radial-gradient(circle, #7c4dff, transparent 65%);
+        bottom: -140px;
+        right: -90px;
+        animation: drift2 11s ease-in-out infinite;
+      }
+      @keyframes drift1 {
+        50% {
+          transform: translate(40px, 30px) scale(1.15);
+        }
+      }
+      @keyframes drift2 {
+        50% {
+          transform: translate(-30px, -25px) scale(1.1);
+        }
+      }
+      /* faint grid overlay */
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(124, 196, 255, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(124, 196, 255, 0.05) 1px, transparent 1px);
+        background-size: 26px 26px;
+        mask-image: radial-gradient(circle at 50% 42%, #000 0%, transparent 72%);
+        pointer-events: none;
+      }
+      .content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .logo-ring {
+        position: relative;
+        width: 128px;
+        height: 128px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 26px;
+      }
+      .logo-ring .halo {
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, #7cc4ff, #3b82f6, #7c4dff, #3b82f6, #7cc4ff);
+        filter: blur(9px);
+        opacity: 0.65;
+        animation: spin 3.4s linear infinite;
+      }
+      .logo-ring .disc {
+        position: absolute;
+        inset: 6px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 25%, #12365c, #0a1626 70%);
+        border: 1px solid rgba(124, 196, 255, 0.25);
+      }
+      .logo-ring img {
+        position: relative;
+        width: 74px;
+        height: 74px;
+        z-index: 2;
+        filter: drop-shadow(0 6px 16px rgba(59, 130, 246, 0.5));
+        animation: float 3.6s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes float {
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      .wordmark {
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        background: linear-gradient(92deg, #ffffff 10%, #7cc4ff 55%, #3b82f6 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .tagline {
+        margin-top: 6px;
+        font-size: 13px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: rgba(200, 220, 245, 0.62);
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        margin-top: 28px;
+      }
+      .chip {
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        padding: 5px 11px;
+        border-radius: 999px;
+        color: rgba(200, 220, 245, 0.55);
+        background: rgba(124, 196, 255, 0.06);
+        border: 1px solid rgba(124, 196, 255, 0.14);
+        animation: chipOn 2.2s ease-in-out infinite;
+      }
+      .chip:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .chip:nth-child(2) {
+        animation-delay: 0.28s;
+      }
+      .chip:nth-child(3) {
+        animation-delay: 0.56s;
+      }
+      .chip:nth-child(4) {
+        animation-delay: 0.84s;
+      }
+      .chip:nth-child(5) {
+        animation-delay: 1.12s;
+      }
+      @keyframes chipOn {
+        0%,
+        60%,
+        100% {
+          color: rgba(200, 220, 245, 0.55);
+          background: rgba(124, 196, 255, 0.06);
+          border-color: rgba(124, 196, 255, 0.14);
+          box-shadow: none;
+        }
+        30% {
+          color: #dff0ff;
+          background: rgba(59, 130, 246, 0.22);
+          border-color: rgba(124, 196, 255, 0.6);
+          box-shadow: 0 0 14px rgba(59, 130, 246, 0.4);
+        }
+      }
+      .bar {
+        position: relative;
+        width: 240px;
+        height: 4px;
+        margin-top: 34px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+      }
+      .bar span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 42%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, transparent, #7cc4ff, #3b82f6, transparent);
+        animation: slide 1.5s ease-in-out infinite;
+      }
+      @keyframes slide {
+        0% {
+          left: -45%;
+        }
+        100% {
+          left: 105%;
+        }
+      }
+      .status {
+        position: relative;
+        height: 16px;
+        margin-top: 16px;
+        width: 260px;
+        text-align: center;
+      }
+      .status span {
+        position: absolute;
+        inset: 0;
+        font-size: 12px;
+        color: rgba(200, 220, 245, 0.7);
+        opacity: 0;
+        animation: cycle 8s linear infinite;
+      }
+      .status span:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .status span:nth-child(2) {
+        animation-delay: 2s;
+      }
+      .status span:nth-child(3) {
+        animation-delay: 4s;
+      }
+      .status span:nth-child(4) {
+        animation-delay: 6s;
+      }
+      @keyframes cycle {
+        0%,
+        25% {
+          opacity: 1;
+        }
+        30%,
+        100% {
+          opacity: 0;
+        }
+      }
+      .version {
+        position: absolute;
+        bottom: 18px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        color: rgba(200, 220, 245, 0.45);
+        z-index: 2;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <div class="grid"></div>
+      <div class="content">
+        <div class="logo-ring">
+          <div class="halo"></div>
+          <div class="disc"></div>
+          <img src="logo192.png" alt="SysPeek" />
+        </div>
+        <div class="wordmark">SysPeek</div>
+        <div class="tagline">System Information Viewer</div>
+        <div class="chips">
+          <span class="chip">CPU</span>
+          <span class="chip">GPU</span>
+          <span class="chip">MEMORY</span>
+          <span class="chip">STORAGE</span>
+          <span class="chip">NETWORK</span>
+        </div>
+        <div class="bar"><span></span></div>
+        <div class="status">
+          <span>Initializing hardware sensors</span>
+          <span>Reading system inventory</span>
+          <span>Gathering live telemetry</span>
+          <span>Preparing dashboard</span>
+        </div>
+      </div>
+      <div class="version">SysPeek v2.0.0</div>
+    </div>
+  </body>
+</html>

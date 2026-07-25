@@ -1,0 +1,4 @@
+provider: github
+owner: shehari007
+repo: SysPeek-hwinfo-react-electron-app
+updaterCacheDirName: syspeek-updater

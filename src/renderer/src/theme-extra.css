@@ -1,0 +1,228 @@
+/* ============================================
+   SysPeek v2 additions: light theme, live charts,
+   update banner, settings drawer, footer actions
+   ============================================ */
+
+/* Dark defaults for the local roles this file introduces. They reproduce the
+   values that used to be hardcoded further down, so dark is unchanged. */
+:root {
+  --swatch-ring: #ffffff;
+  --swatch-ring-halo: rgba(0, 0, 0, 0.3);
+}
+
+/* Light theme remaps the core design tokens. Dark stays the flagship.
+   Accent inks (--accent-*) and the translucent --overlay-* roles are remapped
+   for light in App.css, so they are deliberately not redeclared here. */
+:root[data-theme='light'] {
+  --bg-primary: #f4f6fb;
+  --bg-secondary: #e8edf6;
+  --bg-card: rgba(255, 255, 255, 0.82);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --border-color: rgba(15, 23, 42, 0.1);
+  --border-highlight: rgba(37, 99, 235, 0.4);
+  /* Text inks: 0.68 / 0.5 of near-black on the light surfaces clears 4.5:1. */
+  --text-primary: #0f172a;
+  --text-secondary: rgba(15, 23, 42, 0.68);
+  --text-muted: rgba(15, 23, 42, 0.5);
+  --shadow-lg: 0 20px 45px -15px rgba(15, 23, 42, 0.18);
+  --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.12);
+
+  /* Ring around the selected accent swatch: a white ring is invisible on the
+     light drawer, so it flips to ink with a soft light halo. */
+  --swatch-ring: var(--ds-ink);
+  --swatch-ring-halo: rgba(15, 23, 42, 0.14);
+}
+
+:root[data-theme='light'] .app-shell {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f8 55%, #e7ebf7 100%);
+}
+
+:root[data-theme='light'] .app-sider {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96),
+    rgba(244, 246, 251, 0.9)
+  ) !important;
+}
+
+/* Live charts */
+.mini-chart {
+  width: 100%;
+  min-height: 60px;
+}
+
+.mini-chart .uplot,
+.mini-chart .u-wrap {
+  width: 100% !important;
+}
+
+.mini-chart .u-legend,
+.mini-chart .u-title {
+  color: var(--ds-ink-2);
+}
+
+/* Sparkline strokes are picked for the dark canvas; on white they wash out.
+   Light-only tone-down keeps the dark theme's rendering byte-identical. */
+:root[data-theme='light'] .mini-chart canvas {
+  filter: saturate(1.2) brightness(0.82);
+}
+
+/* Auto-update banner. antd's algorithm supplies the tinted backgrounds; the
+   copy is pinned to the ink tokens so it never lands near-white on a light
+   alert surface. */
+.update-banner {
+  margin: 12px 16px 0;
+  border-radius: var(--radius-md);
+}
+
+.update-banner .ant-alert-message {
+  color: var(--ds-ink);
+}
+
+.update-banner .ant-alert-description {
+  color: var(--ds-ink-2);
+}
+
+.update-banner .ant-alert-close-icon .anticon {
+  color: var(--ds-ink-3);
+}
+
+/* Footer actions */
+.footer-author {
+  color: var(--accent-blue);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.footer-elevated {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.footer-actions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+/* Settings drawer. Every text role is token-driven so the drawer body flips
+   with the theme instead of inheriting near-white copy. */
+.settings-drawer .ant-drawer-title,
+.settings-drawer .ant-drawer-close {
+  color: var(--ds-ink);
+}
+
+.settings-drawer .ant-drawer-body {
+  color: var(--ds-ink);
+}
+
+.settings-drawer .ant-drawer-header,
+.settings-drawer .ant-divider {
+  border-color: var(--ds-line);
+}
+
+.settings-drawer .settings-section,
+.settings-drawer .settings-row-label {
+  color: var(--ds-ink);
+}
+
+.settings-drawer .settings-row-hint,
+.settings-drawer .settings-meta .ant-typography {
+  color: var(--text-muted);
+}
+
+.settings-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px !important;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.settings-row-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-row-label {
+  font-weight: 500;
+}
+
+.settings-row-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.settings-row-control {
+  flex-shrink: 0;
+}
+
+.accent-swatches {
+  display: flex;
+  gap: 8px;
+}
+
+.accent-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.accent-swatch:hover {
+  transform: scale(1.12);
+}
+
+.accent-swatch.active {
+  border-color: var(--swatch-ring);
+  box-shadow: 0 0 0 2px var(--swatch-ring-halo);
+}
+
+.threshold-sliders {
+  margin-top: 12px;
+}
+
+.threshold-slider {
+  margin-bottom: 8px;
+}
+
+.threshold-slider-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* --accent-blue is deepened for light in App.css, so this stays legible as
+   text on a white drawer. */
+.threshold-value {
+  font-weight: 600;
+  color: var(--accent-blue);
+}
+
+/* Slider rail: antd's light rail is almost invisible on the white drawer, so
+   the track is pushed to the hairline token. Light-only, dark untouched. */
+:root[data-theme='light'] .threshold-slider .ant-slider-rail {
+  background-color: var(--ds-line-strong);
+}
+
+:root[data-theme='light'] .threshold-slider .ant-slider:hover .ant-slider-rail {
+  background-color: rgba(15, 23, 42, 0.24);
+}
+
+.settings-meta {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}

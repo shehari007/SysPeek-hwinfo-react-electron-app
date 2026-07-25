@@ -1,0 +1,63 @@
+appId: com.electron.syspeek
+productName: SysPeek
+copyright: Copyright (c) 2026 Muhammad Sheharyar Butt
+directories:
+  buildResources: build
+  output: release
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintcache,eslint.config.js,.prettierignore,.prettierrc,.prettierrc.yaml,dev-app-update.yml}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml,yarn.lock}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - '!{README.md,CHANGELOG.md,CONTRIBUTING.md,SECURITY.md}'
+  - '!{screenshots,docs}/*'
+  - '!.github/*'
+asarUnpack:
+  - resources/**
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  requestedExecutionLevel: asInvoker
+  publisherName: Muhammad Sheharyar Butt
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: SysPeek
+  uninstallDisplayName: SysPeek ${version}
+  deleteAppDataOnUninstall: false
+mac:
+  target:
+    - target: dmg
+    - target: zip
+  category: public.app-category.utilities
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  notarize: false
+dmg:
+  artifactName: ${name}-${version}.${ext}
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Utility
+  maintainer: Muhammad Sheharyar Butt <shehariyar@gmail.com>
+  synopsis: Detailed system information and live hardware monitor
+appImage:
+  artifactName: ${name}-${version}.${ext}
+publish:
+  provider: github
+  owner: shehari007
+  repo: SysPeek-hwinfo-react-electron-app
+  releaseType: release
+npmRebuild: false
+electronLanguages:
+  - en-US
