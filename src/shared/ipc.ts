@@ -206,6 +206,15 @@ export interface UpdateStatus {
   transferred: number
   total: number
   error: string | null
+  /**
+   * True where the app can detect an update but not install one, currently
+   * macOS. The renderer offers a link to the release instead of a progress bar
+   * and a restart button. Decided in the main process so the platform rule
+   * lives in one place rather than being re-derived in the UI.
+   */
+  manualDownload: boolean
+  /** Where to send someone when `manualDownload` is true. */
+  releaseUrl: string
 }
 
 export interface ExportResult {

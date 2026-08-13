@@ -25,7 +25,7 @@ Version 2 keeps the glassmorphism dashboard people liked and rebuilds everything
 - **New build system.** Create React App is replaced by [electron-vite](https://electron-vite.org/), giving instant hot reload for both the UI and the main process.
 - **Hardened security model.** The renderer no longer touches Node. `systeminformation` runs only in the main process, and the UI talks to it through a locked down, context isolated, sandboxed preload bridge.
 - **Full TypeScript.** The main process, the preload bridge, and every React component are typed, with a single shared IPC contract.
-- **Automatic updates.** Built in updater backed by GitHub releases, with an in app "download and restart" flow and a ready to use GitHub Actions release pipeline.
+- **Automatic updates.** Built in updater backed by GitHub releases, with an in app "download and restart" flow and a verified release process that checks every installer against its update manifest before publishing.
 - **Live history charts, a system tray, threshold notifications, a settings panel, theme and accent options, report export, and opt in elevated access.**
 - **Latest dependencies.** Electron 43, React 19, Ant Design 6, systeminformation 5, Vite 7, TypeScript 6.
 
@@ -134,10 +134,14 @@ npm run build:mac     # macOS .dmg and .zip
 SysPeek ships with `electron-updater` wired to GitHub releases. Publishing an update is three steps:
 
 1. Bump `version` in `package.json`.
-2. Commit the change and push a matching tag, for example `v2.0.1`.
-3. The included GitHub Actions workflow (`.github/workflows/release.yml`) builds installers for all three platforms and uploads them, along with the update manifests, to a draft GitHub release. Publish the draft.
+2. Run `npm run release:win`. This packages the installer and verifies the generated `latest.yml`, recomputing each sha512 and size against the files on disk.
+3. Attach the installer, its `.blockmap` and `latest.yml` to a GitHub release, then publish it.
 
-Installed clients check for updates on launch, download in the background, and offer a "Restart and Install" prompt. See [docs/AUTO_UPDATE.md](docs/AUTO_UPDATE.md) for signing notes and the full flow.
+`latest.yml` is the whole feed. It carries the version and the sha512 of each installer, and clients refuse an update whose hash does not match, so the installer and the manifest must come from the same build.
+
+Installed clients check for updates on launch, download in the background, and offer a "Restart and Install" prompt. macOS is the exception: it detects updates but links out to the releases page instead, because installing one requires an Apple Developer ID signature.
+
+[RELEASE.md](RELEASE.md) is the full checklist. See [docs/AUTO_UPDATE.md](docs/AUTO_UPDATE.md) for signing notes and the mechanism underneath.
 
 ## Security model
 

@@ -1,15 +1,25 @@
 name: Release
 
-# Publishing flow:
-#   1. Bump "version" in package.json.
-#   2. Commit, then tag with a matching "vX.Y.Z" and push the tag.
-#   3. This workflow builds installers for Windows, macOS and Linux and publishes
-#      them (plus the latest*.yml update manifests) to a GitHub draft release.
-#   4. Publish the draft. electron-updater clients then see and install the update.
+# Builds installers for Windows, macOS and Linux and publishes them to a draft
+# GitHub release.
+#
+# Run on request rather than on every tag, because releases are normally cut
+# locally. See RELEASE.md. electron-builder writes the same `latest.yml` update
+# manifest either way, so the auto updater cannot tell the two apart.
+#
+# To drive releases from tags instead, restore the trigger:
+#
+#   on:
+#     push:
+#       tags:
+#         - 'v*'
+#     workflow_dispatch:
+#
+# Keep `releaseType: draft` in electron-builder.yml if you do. Three jobs publish
+# into one release, and a non draft release goes live the moment the first of
+# them finishes, which hands clients a `latest.yml` for an installer that has not
+# finished uploading.
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -50,3 +60,6 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Verify update manifests
+        run: npm run verify:manifest

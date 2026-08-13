@@ -30,10 +30,15 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,css,md,yml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,css,md,yml}\"",
+    "verify": "npm run typecheck && npm run lint && npm run build",
+    "verify:manifest": "node scripts/verify-update-manifest.mjs",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
     "build:linux": "npm run build && electron-builder --linux",
+    "release:win": "npm run typecheck && npm run build:win && npm run verify:manifest",
+    "release:mac": "npm run typecheck && npm run build:mac && npm run verify:manifest",
+    "release:linux": "npm run typecheck && npm run build:linux && npm run verify:manifest",
     "release": "npm run build && electron-builder --publish always"
   },
   "dependencies": {

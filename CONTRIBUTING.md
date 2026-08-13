@@ -59,5 +59,4 @@ Keeping this pattern is what preserves the security model. Never reach for `wind
 ## Commit and pull requests
 
 - Keep commits focused and describe the intent.
-- Make sure `npm run typecheck`, `npm run lint`, and `npm run build` all pass before opening a pull request.
-- The CI workflow runs these same checks on every pull request.
+- Make sure `npm run typecheck`, `npm run lint`, and `npm run build` all pass before opening a pull request. `npm run verify` runs all three in order.

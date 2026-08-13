@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Alert, Button, Progress } from 'antd'
-import { DownloadOutlined, ReloadOutlined } from '@ant-design/icons'
+import { DownloadOutlined, ExportOutlined, ReloadOutlined } from '@ant-design/icons'
 import type { UpdateStatus } from '@shared/ipc'
-import { updater } from '../../lib/api'
+import { sysapi, updater } from '../../lib/api'
 
 export default function UpdateBanner(): React.JSX.Element | null {
   const [status, setStatus] = useState<UpdateStatus | null>(null)
@@ -28,6 +28,35 @@ export default function UpdateBanner(): React.JSX.Element | null {
         closable
         message="Update check failed"
         description={status.error ?? 'Unknown error while checking for updates.'}
+      />
+    )
+  }
+
+  // Platforms that can detect an update but not install one, currently macOS.
+  // Showing the usual progress bar here would sit at zero forever, because
+  // nothing is downloading and nothing is going to.
+  if (state === 'available' && status.manualDownload) {
+    return (
+      <Alert
+        className="update-banner"
+        type="info"
+        showIcon
+        closable
+        icon={<DownloadOutlined />}
+        message={`Update ${label} is available`}
+        description="Automatic install is not supported on this platform. Download the new version from the releases page."
+        action={
+          <Button
+            size="small"
+            type="primary"
+            icon={<ExportOutlined />}
+            onClick={() => {
+              sysapi.openExternal(status.releaseUrl).catch(() => {})
+            }}
+          >
+            Open Releases
+          </Button>
+        }
       />
     )
   }

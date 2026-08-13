@@ -9,7 +9,8 @@ Version 2 is a full rewrite of the build system and the application architecture
 ### Added
 
 - Automatic updates through GitHub releases using electron-updater, with an in app "Restart and Install" prompt and a download progress banner.
-- GitHub Actions release pipeline that builds Windows, macOS, and Linux installers on tag push and publishes them to a draft release.
+- Release tooling that builds installers locally and verifies them before upload. `npm run release:win` packages the installer and then recomputes every sha512 and size in the generated `latest.yml` against the files on disk, so a manifest that does not describe its artifacts is caught before it reaches a user rather than after.
+- macOS detects updates but does not install them, because Squirrel refuses an application bundle that is not signed with an Apple Developer ID. Rather than downloading an archive that can never be applied, the update banner links to the releases page.
 - Live history charts for CPU and memory built with uPlot.
 - System tray with a live CPU and memory readout and quick actions.
 - Desktop notifications when CPU temperature, CPU load, memory, or disk usage cross configurable thresholds.

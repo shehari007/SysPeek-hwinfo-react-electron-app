@@ -27,6 +27,14 @@ export default tseslint.config(
     }
   },
   {
+    // Release tooling. Plain Node ES modules run with `node`, never bundled and
+    // never part of the packaged app.
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: { ...globals.node }
+    }
+  },
+  {
     rules: {
       '@typescript-eslint/no-unused-vars': [
         'warn',

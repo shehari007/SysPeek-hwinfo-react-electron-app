@@ -10,6 +10,27 @@ function au(): AppUpdater {
   return electronUpdater.autoUpdater
 }
 
+/** Where someone is sent when the app cannot install the update itself. */
+const RELEASE_PAGE =
+  'https://github.com/shehari007/SysPeek-hwinfo-react-electron-app/releases/latest'
+
+/**
+ * macOS is told about updates but does not apply them.
+ *
+ * Squirrel, which is what Electron uses to swap the application bundle, refuses
+ * to touch a build that is not signed with an Apple Developer ID. SysPeek ships
+ * unsigned: `electron-builder.yml` sets `hardenedRuntime: true` with
+ * `notarize: false` and there is no certificate. Downloading anyway would pull
+ * the whole zip and then fail at the last step, which looks like a broken app
+ * rather than a missing signature.
+ *
+ * Checking is an ordinary manifest download and a version comparison, so that
+ * part works on every platform and is worth keeping. Knowing a new version
+ * exists is most of the value. Remove this once there is an Apple certificate
+ * and `notarize: true`.
+ */
+const MANUAL_DOWNLOAD = process.platform === 'darwin'
+
 let lastStatus: UpdateStatus = {
   state: 'idle',
   version: null,
@@ -18,7 +39,9 @@ let lastStatus: UpdateStatus = {
   bytesPerSecond: 0,
   transferred: 0,
   total: 0,
-  error: null
+  error: null,
+  manualDownload: MANUAL_DOWNLOAD,
+  releaseUrl: RELEASE_PAGE
 }
 
 export function getUpdateStatus(): UpdateStatus {
@@ -27,8 +50,11 @@ export function getUpdateStatus(): UpdateStatus {
 
 export function initUpdater(win: BrowserWindow): void {
   const updater = au()
-  updater.autoDownload = true
-  updater.autoInstallOnAppQuit = true
+  updater.autoDownload = !MANUAL_DOWNLOAD
+  // Nothing is ever downloaded where the install cannot run, so there is nothing
+  // to install on quit either. Leaving it on would invite Squirrel to act on a
+  // build it cannot verify.
+  updater.autoInstallOnAppQuit = !MANUAL_DOWNLOAD
   if (!app.isPackaged) updater.forceDevUpdateConfig = true
 
   const send = (patch: Partial<UpdateStatus>): void => {
@@ -69,5 +95,9 @@ export async function checkForUpdates(): Promise<void> {
 }
 
 export function quitAndInstall(): void {
+  // Guarded here as well as in the interface, because the renderer is not the
+  // only caller and quitting into an install that cannot run would close the app
+  // for nothing.
+  if (MANUAL_DOWNLOAD) return
   au().quitAndInstall()
 }

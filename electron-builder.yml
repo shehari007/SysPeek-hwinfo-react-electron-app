@@ -9,10 +9,10 @@ files:
   - '!src/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
   - '!{.eslintcache,eslint.config.js,.prettierignore,.prettierrc,.prettierrc.yaml,dev-app-update.yml}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml,yarn.lock}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml,yarn.lock,package-lock.json}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
-  - '!{README.md,CHANGELOG.md,CONTRIBUTING.md,SECURITY.md}'
-  - '!{screenshots,docs}/*'
+  - '!{README.md,CHANGELOG.md,CONTRIBUTING.md,SECURITY.md,RELEASE.md}'
+  - '!{screenshots,docs,scripts}/*'
   - '!.github/*'
 asarUnpack:
   - resources/**
@@ -22,13 +22,23 @@ win:
       arch:
         - x64
   requestedExecutionLevel: asInvoker
-  publisherName: Muhammad Sheharyar Butt
+  # `publisherName` used to sit here and it made electron-builder 26 reject the
+  # whole configuration with "configuration.win should be one of these: null".
+  # It moved to `win.signtoolOptions.publisherName`, and it only belongs there
+  # once there is a certificate to sign with: electron-updater checks the
+  # publisher on a downloaded installer against this name, so setting it on an
+  # unsigned build is a way to make every Windows update fail verification.
+  # Add it back under signtoolOptions on the day the app gets signed.
 nsis:
   oneClick: false
   perMachine: false
   allowElevation: true
   allowToChangeInstallationDirectory: true
-  artifactName: ${name}-${version}-setup.${ext}
+  # ${productName}, not ${name}. ${name} is the npm package name, which would
+  # produce "syspeek-systeminfo-viewer-2.0.0-setup.exe". The architecture is in
+  # the name so that adding an arm64 target later does not collide with the
+  # existing x64 installer.
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
   shortcutName: SysPeek
   uninstallDisplayName: SysPeek ${version}
   deleteAppDataOnUninstall: false
@@ -53,11 +63,22 @@ linux:
   synopsis: Detailed system information and live hardware monitor
 appImage:
   artifactName: ${name}-${version}.${ext}
+# This block is what makes electron-builder write the `latest.yml` update
+# manifest next to the installers, with the version, the file names, their sizes
+# and their sha512 hashes. That happens on every packaging run, whether or not
+# anything is uploaded, so a purely local build still produces the exact file
+# the auto updater needs.
 publish:
   provider: github
   owner: shehari007
   repo: SysPeek-hwinfo-react-electron-app
-  releaseType: release
+  # Draft, so a release is assembled before anyone can see it. electron-updater
+  # asks GitHub for the latest published release and drafts are not in that
+  # answer, so nothing updates until you press Publish yourself. With the old
+  # `release` value each upload went live immediately, which on a partially
+  # uploaded release means clients read a manifest pointing at an installer that
+  # is not there yet.
+  releaseType: draft
 npmRebuild: false
 electronLanguages:
   - en-US
